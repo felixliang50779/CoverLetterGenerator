@@ -18,14 +18,14 @@ app.use((req, res, next) => {
 })
 
 /**
- * Cover letter pdf sent in "multipart/form-data" format
+ * Cover letter pdf received in "multipart/form-data" format
  * 
  * Potential flow:
  * Download pdf on server
  * Convert pdf to html
- * parse html for templated words/phrases
+ * parse html with regex for templated words/phrases
  * 
- * returns: object with array of templated words, html as file blob
+ * returns: object with array of templated words, html doc as string
  */
 app.post("/parseFileHandler", (req, res) => {
 });
