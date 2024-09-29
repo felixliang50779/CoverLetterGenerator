@@ -8,7 +8,7 @@
     },
     "permissions": ["clipboardRead"],
     "background": {
-      "service_worker": "content.mjs",
+      "service_worker": "background.js",
       "type": "module"
     }
 }
