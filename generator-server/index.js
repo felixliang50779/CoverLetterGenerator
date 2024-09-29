@@ -17,8 +17,17 @@ app.use((req, res, next) => {
   next()
 })
 
-app.post("/processFileHandler", (req, res) => {
-    
+/**
+ * Cover letter pdf sent in "multipart/form-data" format
+ * 
+ * Potential flow:
+ * Download pdf on server
+ * Convert pdf to html
+ * parse html for templated words/phrases
+ * 
+ * returns: object with array of templated words, html as file blob
+ */
+app.post("/parseFileHandler", (req, res) => {
 });
 
 app.listen(process.env.PORT, error => {
