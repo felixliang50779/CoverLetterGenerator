@@ -6,9 +6,18 @@
     "action": {
       "default_popup": "index.html"
     },
-    "permissions": ["clipboardRead"],
+    "permissions": ["activeTab", "scripting", "tabs"],
+    "host_permissions": ["*://*/*"],
     "background": {
       "service_worker": "background.js",
       "type": "module"
+    },
+    "commands": {
+      "get-selected-text": {
+        "suggested-key": {
+          "default": "Alt+Z"
+        },
+        "description": "Get selected text from the currently active tab"
+      }
     }
 }

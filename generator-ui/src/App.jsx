@@ -1,9 +1,6 @@
 // External Modules
 import { useState } from 'react';
 
-// Internal Modules
-import { processFile } from '../public/background.js';
-
 // Styling
 import './App.css';
 import './index.css';
@@ -23,7 +20,7 @@ export default function App() {
         event.target.files[0] ? setCurrentFileName(event.target.files[0].name) : setCurrentFileName(PLACEHOLDER_FILENAME);
       }}/>
       <span id="spacer" />
-      <button className={currentFileName === PLACEHOLDER_FILENAME ? 'hidden confirm-button' : 'confirm-button'} onClick={() => processFile(currentFileName)}>
+      <button className={currentFileName === PLACEHOLDER_FILENAME ? 'hidden confirm-button' : 'confirm-button'} onClick={() => {}}>
         Generate
       </button>
     </div>
