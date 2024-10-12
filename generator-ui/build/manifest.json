@@ -2,20 +2,32 @@
     "manifest_version": 3,
     "name": "Cover Letter Generator",
     "version": "1.0.0",
-    "description": "yum",
     "action": {
       "default_popup": "index.html"
     },
-    "permissions": ["activeTab", "scripting", "tabs"],
+    "permissions": ["activeTab", "scripting"],
     "host_permissions": ["*://*/*"],
     "background": {
       "service_worker": "background.js",
       "type": "module"
     },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.mjs"],
+        "type": "module"
+      }
+    ],
+    "web_accessible_resources": [
+      {
+        "resources": ["public/index.var.js"],
+        "matches": ["<all_urls>"]
+      }
+    ],
     "commands": {
       "get-selected-text": {
         "suggested-key": {
-          "default": "Alt+Z"
+          "default": "Alt+C"
         },
         "description": "Get selected text from the currently active tab"
       }

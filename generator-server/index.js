@@ -1,11 +1,12 @@
 import express from "express"
 import dotenv from "dotenv";  // REMOVE FOR PROD
-import { PdfToHtmlClient } from 'pdfcrowd';
+import base64 from "base64topdf";
+import fs from "fs";
+import pdftohtml from "@dsardar099/pdf-to-html";
 
 // REMOVE FOR PROD
 dotenv.config();
 
-const conversionClient = new PdfToHtmlClient(process.env.USERNAME, process.env.KEY);
 const app = express();
 
 // Enable CORS for ExpressJS
@@ -17,6 +18,8 @@ app.use((req, res, next) => {
   next()
 })
 
+app.use(express.json());
+
 /**
  * Cover letter pdf received in "multipart/form-data" format
  * 
@@ -27,8 +30,25 @@ app.use((req, res, next) => {
  * 
  * returns: object with array of templated words, html doc as string
  */
-app.post("/parseFileHandler", (req, res) => {
+app.post("/parseFileHandler", async (req, res) => {
+    // Decode encoded string into pdf file and save it
+    base64.base64Decode(req.body.fileString, 'result.pdf');
 
+    // Convert pdf to html
+    const converter = new pdftohtml('result.pdf', 'result.html');
+    await converter.convert();
+    
+    // Read the HTML file
+    fs.readFile('result.html', 'utf-8', (err, data) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to read the HTML file' });
+        }
+        
+        const regExp = /%t(.*?)%t/g;
+        const matchedTargets = [...data.matchAll(regExp)];
+        console.log(matchedTargets);
+        res.send(matchedTargets);
+    });
 });
 
 app.listen(process.env.PORT, error => {

@@ -2,21 +2,18 @@ chrome.commands.onCommand.addListener(async function (command) {
     if (command == "get-selected-text") {
         const currentTab = await getCurrentTab();
         chrome.scripting.executeScript({
-            target: { tabId: currentTab.id, allFrames: true}, 
-            func: () => {
-                const selectedText = getSelectionText();
-                console.log(selectedText);
-            }
+            target: { tabId: currentTab.id },
+            func: getSelectionText
         });
     }
 });
 
-async function getCurrentTab() {
-    let queryOptions = { active: true, lastFocusedWindow: true };
-    // `tab` will either be a `tabs.Tab` instance or `undefined`.
-    let [tab] = await chrome.tabs.query(queryOptions);
-    return tab;
-}
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+    if (message.action === "getCurrentTab") {
+        sendResponse({ currentTab: getCurrentTab()});
+        return true;
+    }
+});
 
 //The following code to get the selection is from an answer to "Get the
 //  Highlighted/Selected text" on Stack Overflow, available at:
@@ -37,5 +34,13 @@ function getSelectionText() {
     } else if (window.getSelection) {
         text = window.getSelection().toString();
     }
+    window.console.log(text);
     return text;
+}
+
+export async function getCurrentTab() {
+    let queryOptions = { active: true, lastFocusedWindow: true };
+    // `tab` will either be a `tabs.Tab` instance or `undefined`.
+    let [tab] = await chrome.tabs.query(queryOptions);
+    return tab;
 }
