@@ -8,13 +8,6 @@ chrome.commands.onCommand.addListener(async function (command) {
     }
 });
 
-chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
-    if (message.action === "getCurrentTab") {
-        sendResponse({ currentTab: getCurrentTab()});
-        return true;
-    }
-});
-
 //The following code to get the selection is from an answer to "Get the
 //  Highlighted/Selected text" on Stack Overflow, available at:
 //  https://stackoverflow.com/a/5379408

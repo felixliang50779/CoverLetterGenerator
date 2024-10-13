@@ -12,12 +12,9 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@dsardar099/pdf-to-html": "^1.0.6",
-    "base64topdf": "^1.1.8",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
-    "fs": "^0.0.1-security",
-    "node-jre": "^0.2.3",
+    "multer": "^1.4.5-lts.1",
     "nodemon": "^3.1.7"
   }
 }

@@ -1,24 +1,20 @@
 // External Modules
 import { useState } from 'react';
-import pdf2base64 from 'pdf-to-base64';
 
 // Styling
 import './App.css';
 import './index.css';
-import '../public/style.css';
 
-async function getTemplateTargets(filename) {
+async function getTemplateTargets(file) {
+
+  const formData = new FormData();
+  formData.set("file", file);
+
   try {
-    const base64pdf = await pdf2base64(`C:/Users/flian/Downloads/${filename}`);
-    const response = await fetch("http://localhost:8080/parseFileHandler", {
-      headers: {
-        "Content-Type": "application/json"
-      },
+    await fetch("http://localhost:8080/parseFileHandler", {
       method: "POST",
-      body: JSON.stringify({ fileString: base64pdf })
+      body: formData
     });
-    const htmlString = await response.json();
-    console.log(htmlString);
   }
   catch (e) {
     console.log(e);
@@ -27,19 +23,19 @@ async function getTemplateTargets(filename) {
 
 export default function App() {
   // Constants
-  const PLACEHOLDER_FILENAME = "Choose a File (.pdf)";
+  const PLACEHOLDER_FILE = { name: "Choose a File (.pdf)" };
 
-  const [currentFileName, setCurrentFileName] = useState(PLACEHOLDER_FILENAME);
+  const [currentFile, setCurrentFile] = useState(PLACEHOLDER_FILE);
 
   return (
     <div className="container">
       <h1>COVER LETTER GENERATOR</h1>
-      <label for="file-upload" className="button">{currentFileName}</label>
+      <label for="file-upload" className="button">{currentFile.name}</label>
       <input id="file-upload" type="file" accept="application/pdf" onChange={event => {
-        event.target.files[0] ? setCurrentFileName(event.target.files[0].name) : setCurrentFileName(PLACEHOLDER_FILENAME);
+        event.target.files[0] ? setCurrentFile(event.target.files[0]) : setCurrentFile(PLACEHOLDER_FILE);
       }}/>
       <span id="spacer" />
-      <button className={currentFileName === PLACEHOLDER_FILENAME ? 'hidden confirm-button' : 'confirm-button'} onClick={() => getTemplateTargets(currentFileName)}>
+      <button className={Object.keys(currentFile).length === 1 ? 'hidden confirm-button' : 'confirm-button'} onClick={() => getTemplateTargets(currentFile)}>
         Generate
       </button>
     </div>

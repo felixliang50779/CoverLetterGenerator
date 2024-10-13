@@ -11,19 +11,6 @@
       "service_worker": "background.js",
       "type": "module"
     },
-    "content_scripts": [
-      {
-        "matches": ["<all_urls>"],
-        "js": ["content.mjs"],
-        "type": "module"
-      }
-    ],
-    "web_accessible_resources": [
-      {
-        "resources": ["public/index.var.js"],
-        "matches": ["<all_urls>"]
-      }
-    ],
     "commands": {
       "get-selected-text": {
         "suggested-key": {
