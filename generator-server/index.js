@@ -1,4 +1,5 @@
 import express from "express"
+import request from "request";
 import multer from "multer";
 import dotenv from "dotenv";  // REMOVE FOR PROD
 
@@ -62,15 +63,27 @@ app.post("/parseFileHandler", upload.single("file"), async (req, res) => {
     }
 
     try {
-        const parseRawResponse = await fetch("https://api.pdf.co/v1/pdf/find", {
-            headers: {
-                "x-api-key": process.env.PDFKEY
-            },
-            method: "POST",
-            body: JSON.stringify({ url: generateUrlResponse.url.split('?')[0], regexSearch: "true", searchString: "/%t(.*?)%t/g" })
-        });
+        // Prepare URL for PDF text search API call.
+        // See documentation: https://developer.pdf.co
+        var query = `https://api.pdf.co/v1/pdf/find`;
+        let reqOptions = {
+            uri: query,
+            headers: { "x-api-key": process.env.PDFKEY },
+            formData: {
+                url: generateUrlResponse.url,
+                searchString: "/%t(.*?)%t/g"
+            }
+        };
 
-        console.log(parseRawResponse);
+        // Send request
+        request.post(reqOptions, function (error, response, body) {
+            if (error) {
+                return console.error("Error: ", error);
+            }
+
+            // Parse JSON response
+            console.log(JSON.parse(body));
+        });
     }
     catch (e) {
         console.log(`Failed at parse pdf step with error ${e}`);
