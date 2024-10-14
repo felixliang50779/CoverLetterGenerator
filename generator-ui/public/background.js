@@ -1,12 +1,42 @@
+// Extension shortcuts listener
 chrome.commands.onCommand.addListener(async function (command) {
-    if (command == "get-selected-text") {
+    if (command === "get-selected-text") {
         const currentTab = await getCurrentTab();
         chrome.scripting.executeScript({
             target: { tabId: currentTab.id },
             func: getSelectionText
         });
     }
+    else if (command == "toggle-previous-select") {
+        displayNotification("Now selecting for previous template item");
+    }
+    else if (command === "toggle-next-select") {
+        displayNotification("Now selecting for next template item");
+    }
 });
+
+// Listening for and handling messages from extension popup
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.msg === "osError") {
+        displayNotification("Your OS is not compatible at this time");
+    }
+});
+
+/////////////////// HELPER FUNCTIONS ///////////////////
+
+async function displayNotification(message) {
+    const notification = await chrome.notifications.create(
+        {
+            type: "basic",
+            iconUrl: "alert-icon.png",
+            title: "Cover Letter Generator",
+            message: message,
+            silent: true
+        }
+    )
+
+    setTimeout(() => chrome.notifications.clear(notification), 1000);
+}
 
 //The following code to get the selection is from an answer to "Get the
 //  Highlighted/Selected text" on Stack Overflow, available at:
@@ -25,13 +55,13 @@ function getSelectionText() {
     ) {
         text = activeEl.value.slice(activeEl.selectionStart, activeEl.selectionEnd);
     } else if (window.getSelection) {
-        text = window.getSelection().toString();
+        text = window.getSelection().toString().trim();
     }
     window.console.log(text);
     return text;
 }
 
-export async function getCurrentTab() {
+async function getCurrentTab() {
     let queryOptions = { active: true, lastFocusedWindow: true };
     // `tab` will either be a `tabs.Tab` instance or `undefined`.
     let [tab] = await chrome.tabs.query(queryOptions);

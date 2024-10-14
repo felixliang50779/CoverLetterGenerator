@@ -5,8 +5,8 @@
     "action": {
       "default_popup": "index.html"
     },
-    "permissions": ["activeTab", "scripting"],
-    "host_permissions": ["*://*/*"],
+    "permissions": ["activeTab", "scripting", "notifications"],
+    "host_permissions": ["file://*/*", "http://localhost:8080/*"],
     "background": {
       "service_worker": "background.js",
       "type": "module"
@@ -14,9 +14,21 @@
     "commands": {
       "get-selected-text": {
         "suggested-key": {
-          "default": "Alt+C"
+          "default": "Alt+W"
         },
-        "description": "Get selected text from the currently active tab"
+        "description": "Set current template target to selected text from the active tab"
+      },
+      "toggle-previous-select": {
+        "suggested-key": {
+          "default": "Alt+Q"
+        },
+        "description": "Switch to the previous template target"
+      },
+      "toggle-next-select": {
+        "suggested-key": {
+          "default": "Alt+E"
+        },
+        "description": "Switch to the next template target"
       }
     }
 }
