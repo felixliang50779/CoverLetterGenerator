@@ -1,6 +1,6 @@
-import express from "express"
 import { createReport } from "docx-templates";
-import fs from 'fs';
+import base64 from 'base64-arraybuffer';
+import express from "express";
 import dotenv from "dotenv";  // REMOVE FOR PROD
 
 // REMOVE FOR PROD
@@ -10,7 +10,7 @@ const app = express();
 
 app.use(express.json());
 
-// Enable CORS for ExpressJS
+// Enable CORS
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS')
@@ -21,16 +21,15 @@ app.use((req, res, next) => {
 
 
 app.post("/generateFileHandler", async (req, res) => {
-    console.log(req.body.data);
+    const arrayBuffer = base64.decode(req.body.template);
 
-    const tempDoc = fs.readFileSync(`C:/Users/flian/Downloads/${req.body.template}`);
     const buffer = await createReport({
-        template: tempDoc,
+        template: arrayBuffer,
         data: req.body.data,
         cmdDelimiter: ["%t", "%t"]
     });
 
-    fs.writeFileSync('modified.docx', buffer);
+    res.send({ completedFile: base64.encode(buffer) });
 });
 
 app.listen(process.env.PORT, error => {

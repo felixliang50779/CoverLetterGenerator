@@ -1,5 +1,6 @@
 // External Modules
 import { useState } from 'react';
+import { Buffer } from 'buffer';
 import { saveAs } from 'file-saver';
 import mammoth from 'mammoth';
 
@@ -7,49 +8,83 @@ import mammoth from 'mammoth';
 import './App.css';
 import './index.css';
 
-async function getTemplateTargets(file) {
-  const fileReader = new FileReader();
+async function processFile(file, fileReader) {
   const regex = /%t(.*?)%t/g;
 
-  fileReader.onload = async function(e) {
-    let arrayBuffer = new Uint8Array(fileReader.result);
-    
-    let result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
-    
-    // Getting targets duplicates and all
-    const rawTargets = result.value.matchAll(regex).toArray().map(match => match[0]);
+  return new Promise((resolve, reject) => {
+    fileReader.onload = async (e) => {
+      let arrayBuffer = new Uint8Array(fileReader.result);
+      
+      let result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
+      
+      // Getting targets duplicates and all
+      const rawTargets = result.value.matchAll(regex).toArray().map(match => match[0]);
+  
+      // Getting unique template targets
+      const targets = rawTargets.filter((target, index, self) => {
+  
+        // checks whether target is the first instance of
+        // target value
+        return index == self.indexOf(target);
+      });
 
-    // Getting unique template targets
-    const targets = rawTargets.filter((target, index, self) => {
-
-      // checks whether target is the first instance of
-      // target value
-      return index == self.indexOf(target);
-    });
-
-
-    // Manually setting replacement text here for testing
-    const replacementTexts = ['10/13/2024', 'McDonalds', 'Deloitte', 'We hate everything', "Human Resources", "HR Intern", "Mom and Dad", "HR Firing Squad"];
-    
-    const replacementObj = {};
-    for (let i = 0; i < targets.length; i++) {
-      const processedTarget = targets[i].slice(2, -2);
-      replacementObj[processedTarget] = replacementTexts[i];
+      resolve(targets);
     }
 
-    console.log(typeof(file));
+    fileReader.onerror = () => {
+      fileReader.abort();
+      reject("Error with parsing input file");
+    };
 
-    await fetch("http://localhost:8080/generateFileHandler", {
-      headers: {
-        "Content-Type": "application/json"
-      },
-      method: "POST",
-      body: JSON.stringify({ data: replacementObj, template: file.name })
-    });
+    fileReader.readAsArrayBuffer(file);
+  })
+}
 
+async function convertBase64(file, fileReader) {
+  return new Promise((resolve, reject) => {
+    fileReader.onload = async (e) => {
+      resolve(fileReader.result);
+    }
+
+    fileReader.onerror = () => {
+      fileReader.abort();
+      reject("Failed to convert file to base64 string");
+    }
+    
+    fileReader.readAsDataURL(file);
+  });
+}
+
+async function getTemplateTargets(file) {
+
+  const fileReader = new FileReader();
+
+  const targets = await processFile(file, fileReader);
+  const base64file = await convertBase64(file, fileReader);
+
+  // Manually setting replacement text here for testing
+  const replacementTexts = ['10/13/2024', 'McDonalds', 'Deloitte', 'We hate everything', "Human Resources", "HR Intern", "Mom and Dad", "HR Firing Squad"];
+  
+  const replacementObj = {};
+  for (let i = 0; i < targets.length; i++) {
+    const processedTarget = targets[i].slice(2, -2);
+    replacementObj[processedTarget] = replacementTexts[i];
   }
 
-  fileReader.readAsArrayBuffer(file);
+  const response = await fetch("http://localhost:8080/generateFileHandler", {
+    headers: {
+      "Content-Type": "application/json"
+    },
+    method: "POST",
+    body: JSON.stringify({ data: replacementObj, template: base64file })
+  });
+
+  const base64Response = (await response.json()).completedFile;
+  const buffer = Buffer.from(base64Response, 'base64');
+  const fileBlob = new Blob ([buffer], 
+    { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+
+  await saveAs(fileBlob, `Modified ${file.name}`);
 }
 
 export default function App() {

@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "buffer": "^6.0.3",
     "chrome-types": "^0.1.307",
     "docx-templates": "^4.13.0",
     "file-saver": "^2.0.5",
