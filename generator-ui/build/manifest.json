@@ -5,7 +5,7 @@
     "action": {
       "default_popup": "index.html"
     },
-    "permissions": ["activeTab", "scripting", "notifications"],
+    "permissions": ["activeTab", "scripting", "notifications", "storage"],
     "host_permissions": ["file://*/*", "http://localhost:8080/*"],
     "background": {
       "service_worker": "background.js",
