@@ -48,6 +48,31 @@ export async function convertBase64(file, fileReader) {
       fileReader.readAsDataURL(file);
     });
 }
+
+export async function initializeTemplating(currentFile, fileReader) {
+    const [targetArray, targetObj] = await getTemplateTargets(currentFile.data, fileReader);
+    const dbUpdates = [];
+
+    // TO-DO: store 'Date' in an array of prefilled targets
+    // for future-proofing
+    if ("Date" in targetObj) {
+      const currentDate = new Date();
+      targetObj.Date = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`;
+    }
+
+    // Convert file to base64 for storage
+    const base64File = await convertBase64(currentFile.data, fileReader);
+
+    // Update DB
+    dbUpdates.push(chrome.storage.session.set({ currentFile: { name: currentFile.name, data: base64File } }));
+    dbUpdates.push(chrome.storage.session.set({ templateTargets: targetObj }));
+    dbUpdates.push(chrome.storage.session.set(
+      { templateMetadata: { currentlySelected: targetArray[0], numTargets: targetArray.length } }));
+
+
+    // Resolve DB updates concurrently
+    await Promise.all(dbUpdates);
+}
   
 export async function generateFile(file, targets) {
   

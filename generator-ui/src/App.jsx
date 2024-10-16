@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 
 // Internal Modules
-import { generateFile, getTemplateTargets, convertBase64 } from './helper';
+import { initializeTemplating, generateFile } from './helper';
 
 // Styling
 import './App.css';
@@ -19,32 +19,6 @@ export default function App() {
 
   // will include 'currentlySelected' and 'numTargets' properties
   const [templateMetadata, setTemplateMetadata] = useState({});
-
-
-  const initializeTemplating = async () => {
-    const [targetArray, targetObj] = await getTemplateTargets(currentFile.data, FILE_READER);
-    const dbUpdates = [];
-
-    // TO-DO: store 'Date' in an array of prefilled targets
-    // for future-proofing
-    if ("Date" in targetObj) {
-      const currentDate = new Date();
-      targetObj.Date = `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`;
-    }
-
-    // Convert file to base64 for storage
-    const base64File = await convertBase64(currentFile.data, FILE_READER);
-
-    // Update DB
-    dbUpdates.push(chrome.storage.session.set({ currentFile: { name: currentFile.name, data: base64File } }));
-    dbUpdates.push(chrome.storage.session.set({ templateTargets: targetObj }));
-    dbUpdates.push(chrome.storage.session.set(
-      { templateMetadata: { currentlySelected: targetArray[0], numTargets: targetArray.length } }));
-
-
-    // Resolve DB updates concurrently
-    await Promise.all(dbUpdates);
-  }
 
   // Every time the extension popup is opened
   useEffect(async () => {
@@ -92,7 +66,7 @@ export default function App() {
       <span id="spacer" />
       <button
         className={currentFile.name === PLACEHOLDER_FILE.name ? 'hidden confirm-button' : 'confirm-button'}
-        onClick={initializeTemplating}>
+        onClick={() => initializeTemplating(currentFile, FILE_READER)}>
           Parse
       </button>
       <button onClick={() => generateFile(currentFile, templateTargets)}>
