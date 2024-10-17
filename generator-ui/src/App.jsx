@@ -97,14 +97,15 @@ export default function App() {
           <span className='vertical-spacer' />
           <div className="button-group">
             <button
-              className="button cancel-button"
+              className={Object.values(templateTargets).every(value => value !== "") ? "button cancel-button split" :
+                "button cancel-button single"}
               onClick={() => chrome.storage.session.clear()}>
                 Cancel
             </button>
             <span className="horizontal-spacer" />
             <button
               className={Object.values(templateTargets).every(value => value !== "") ? 
-                "button confirm-button" : "hidden button confirm-button"}
+                "button confirm-button split" : "hidden button confirm-button"}
               onClick={() => generateFile(currentFile, templateTargets)}>
                 Generate
             </button>

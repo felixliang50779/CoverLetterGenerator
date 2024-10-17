@@ -26,8 +26,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.5em;
-  padding-top: 0.5em !important;
-  padding-bottom: 0.5em !important;
+  padding-top: 0.2em !important;
+  padding-bottom: 0.2em !important;
   max-height: 20em;
   overflow: auto;
 }
@@ -90,8 +90,15 @@ input[type="file"] {
   cursor: pointer;
   text-overflow: ellipsis;
   overflow: hidden;
-  width: 100%;
   transition: border-color 0.25s;
+}
+
+.single {
+  min-width: 100%;
+}
+
+.split {
+  width: 100%;
 }
 
 .button:hover {
