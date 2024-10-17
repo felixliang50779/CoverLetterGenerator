@@ -1,12 +1,13 @@
 // External Modules
 import { useState, useEffect } from 'react';
+import { Card } from "antd";
 
 // Internal Modules
 import { initializeTemplating, generateFile } from './helper';
+import FloatInput from './components/FloatInput';
 
 // Styling
 import './App.css';
-import './index.css';
 
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
 
   // will include 'currentlySelected' and 'numTargets' properties
   const [templateMetadata, setTemplateMetadata] = useState({});
+
 
   // Every time the extension popup is opened
   useEffect(async () => {
@@ -63,15 +65,51 @@ export default function App() {
           event.target.files[0] ? setCurrentFile({ name: event.target.files[0].name, data: event.target.files[0] }) : 
             setCurrentFile(PLACEHOLDER_FILE);
         }}/>
-      <span id="spacer" />
-      <button
-        className={currentFile.name === PLACEHOLDER_FILE.name ? 'hidden confirm-button' : 'confirm-button'}
-        onClick={() => initializeTemplating(currentFile, FILE_READER)}>
-          Parse
-      </button>
-      <button onClick={() => generateFile(currentFile, templateTargets)}>
-        Generate
-      </button>
+      <span className="vertical-spacer" />
+      {!Object.keys(templateTargets).length ?
+        <button
+          className={currentFile.name === PLACEHOLDER_FILE.name ?
+            'hidden button confirm-button' : 'button confirm-button'}
+          onClick={() => initializeTemplating(currentFile, FILE_READER)}>
+            Parse
+        </button> :
+        <div className="secondary-container">
+          <Card
+            title="No unsaved changes ✓"
+            style={{ 
+              textAlign: 'left',
+              backgroundColor: "#1a1a1a"
+            }} >
+              {
+                Object.entries(templateTargets).map(([target, value]) => {
+                  return (
+                    <FloatInput
+                      target={target}
+                      value={value}
+                      setTemplateTargets={setTemplateTargets}
+                      label={target}
+                      placeholder={target}
+                      type="text" />
+                  );
+                })
+              } 
+          </Card>
+          <span className='vertical-spacer' />
+          <div className="button-group">
+            <button
+              className="button cancel-button"
+              onClick={() => chrome.storage.session.clear()}>
+                Cancel
+            </button>
+            <span className="horizontal-spacer" />
+            <button
+              className="button confirm-button"
+              onClick={() => generateFile(currentFile, templateTargets)}>
+                Generate
+            </button>
+          </div>
+        </div>
+      }
     </div>
   )
 }

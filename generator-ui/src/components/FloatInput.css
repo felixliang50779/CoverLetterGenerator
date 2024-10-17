@@ -1,0 +1,29 @@
+.float-label {
+    position: relative;
+}
+
+.label {
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 12px;
+    top: 8px;
+    transition: 0.2s ease all;
+}
+
+.as-placeholder {
+    color: gray;
+}
+
+.as-label {
+    top: -8px;
+    font-size: 12px !important;
+    background: #1a1a1a;
+    color: #f8f8f2;
+    padding: 0 4px;
+    margin-left: -4px;
+}
+
+.ant-input-outlined:hover, .ant-input-outlined:focus {
+    border-color: #646cff;
+}

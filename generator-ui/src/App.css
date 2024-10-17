@@ -1,5 +1,111 @@
-#root {
-  margin: 0 auto;
+/* Overriding body margin in index.html*/
+body {
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  
   padding: 2rem;
   text-align: center;
+
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  width: 35em;
+  min-height: 10em;
+
+}
+
+.ant-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  padding-top: 0.5em !important;
+  padding-bottom: 0.5em !important;
+  max-height: 20em;
+  overflow: auto;
+}
+
+.ant-card-head-title {
+  color: #f8f8f2;
+  font-size: 0.9em;
+}
+
+.ant-input {
+  color: #f8f8f2;
+}
+
+h1 {
+  margin: 0;
+  margin-left: 0.8em;
+  margin-bottom: 0.8em;
+  font-size: 2em;
+  line-height: 1.1;
+}
+
+input[type="file"] {
+  display: none;
+  padding: 0;
+  margin: 0;
+}
+
+.vertical-spacer {
+  margin: 0.5em 0 0.5em 0;
+}
+
+.horizontal-spacer {
+  margin: 0 0.5em 0 0.5em;
+}
+
+.hidden {
+  display: none;
+}
+
+.secondary-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  border-color: whitesmoke;
+  padding: 0.6em 0;
+  font-size: 1.2em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+  transition: border-color 0.25s;
+}
+
+.button:hover {
+  border-color: #646cff;
+}
+
+.confirm-button:hover {
+  border-color: #50fa7b;
+}
+
+.cancel-button:hover {
+  border-color: #ff5555;
+}
+
+.button:focus, .button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
 }
