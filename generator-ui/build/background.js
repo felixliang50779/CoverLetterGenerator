@@ -15,13 +15,6 @@ chrome.commands.onCommand.addListener(async function (command) {
     }
 });
 
-// Listening for and handling messages from extension popup
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.msg === "osError") {
-        displayNotification("Your OS is not compatible at this time");
-    }
-});
-
 /////////////////// HELPER FUNCTIONS ///////////////////
 
 async function displayNotification(message) {

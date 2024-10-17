@@ -26,8 +26,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.5em;
-  padding-top: 0.2em !important;
-  padding-bottom: 0.2em !important;
+  padding-top: 0.1em !important;
+  padding-bottom: 0.1em !important;
   max-height: 20em;
   overflow: auto;
 }
@@ -41,12 +41,12 @@ body {
 }
 
 .ant-card-body::-webkit-scrollbar-thumb {
-  background: #FFFDD0; /* Thumb color */
+  background: #f8f8f2; /* Thumb color */
   border-radius: 12px; /* Rounded corners */
 }
 
 .ant-card-body::-webkit-scrollbar-thumb:hover {
-  background: #FFFDD0; /* Thumb color on hover */
+  background: #f8f8f2; /* Thumb color on hover */
 }
 
 .ant-card-head-title {

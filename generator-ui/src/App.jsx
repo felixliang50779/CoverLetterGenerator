@@ -77,7 +77,7 @@ export default function App() {
         </button> :
         <div className="secondary-container">
           <Card
-            title="Targets"
+            title="Templated Items"
             style={{ 
               textAlign: 'left',
               backgroundColor: "#1a1a1a"
