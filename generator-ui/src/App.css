@@ -32,6 +32,23 @@ body {
   overflow: auto;
 }
 
+.ant-card-body::-webkit-scrollbar {
+  width: 0.5em; /* Width of the scrollbar */
+}
+
+.ant-card-body::-webkit-scrollbar-track {
+  background: #242424; /* Track color */
+}
+
+.ant-card-body::-webkit-scrollbar-thumb {
+  background: #FFFDD0; /* Thumb color */
+  border-radius: 12px; /* Rounded corners */
+}
+
+.ant-card-body::-webkit-scrollbar-thumb:hover {
+  background: #FFFDD0; /* Thumb color on hover */
+}
+
 .ant-card-head-title {
   color: #f8f8f2;
   font-size: 0.9em;
