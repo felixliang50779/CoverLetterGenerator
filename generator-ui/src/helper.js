@@ -75,24 +75,12 @@ export async function initializeTemplating(currentFile, fileReader) {
 }
   
 export async function generateFile(file, targets) {
-  
-    // Manually setting replacement text here for testing
-    const replacementTexts = ['10/13/2024', 'McDonalds', 'Deloitte', 'We hate everything', "Human Resources", "HR Intern", "Mom and Dad", "HR Firing Squad"];
-  
-  
-    // Mapping to the wrong targets here as objects don't preserve order
-    // working version will use 'targets' itself as the replacementObj so should be ok
-    const replacementObj = {};
-    for (let i = 0; i < Object.keys(targets).length ; i++) {
-      replacementObj[Object.keys(targets)[i]] = replacementTexts[i];
-    }
-  
     const response = await fetch("http://localhost:8080/generateFileHandler", {
       headers: {
         "Content-Type": "application/json"
       },
       method: "POST",
-      body: JSON.stringify({ data: replacementObj, template: file.data })
+      body: JSON.stringify({ data: targets, template: file.data })
     });
   
     const base64Response = (await response.json()).completedFile;

@@ -75,7 +75,7 @@ export default function App() {
         </button> :
         <div className="secondary-container">
           <Card
-            title="No unsaved changes ✓"
+            title="Targets"
             style={{ 
               textAlign: 'left',
               backgroundColor: "#1a1a1a"
@@ -103,7 +103,8 @@ export default function App() {
             </button>
             <span className="horizontal-spacer" />
             <button
-              className="button confirm-button"
+              className={Object.values(templateTargets).every(value => value !== "") ? 
+                "button confirm-button" : "hidden button confirm-button"}
               onClick={() => generateFile(currentFile, templateTargets)}>
                 Generate
             </button>
