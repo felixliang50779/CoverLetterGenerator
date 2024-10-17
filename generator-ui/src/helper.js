@@ -106,3 +106,14 @@ export async function getTemplateTargets(file, fileReader) {
   
     return [processedTargetArray, targetObj];
 }
+
+export function clearData(fileInputRef) {
+  chrome.storage.session.clear(() => {
+      var error = chrome.runtime.lastError;
+      if (error) {
+          console.error(error);
+      }
+      // clear file input
+      fileInputRef.current.value = ""
+  });
+}

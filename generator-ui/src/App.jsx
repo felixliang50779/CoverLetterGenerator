@@ -1,9 +1,9 @@
 // External Modules
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card } from "antd";
 
 // Internal Modules
-import { initializeTemplating, generateFile } from './helper';
+import { initializeTemplating, generateFile, clearData } from './helper';
 import FloatInput from './components/FloatInput';
 
 // Styling
@@ -21,6 +21,7 @@ export default function App() {
   // will include 'currentlySelected' and 'numTargets' properties
   const [templateMetadata, setTemplateMetadata] = useState({});
 
+  const fileInputRef = useRef();
 
   // Every time the extension popup is opened
   useEffect(async () => {
@@ -57,10 +58,11 @@ export default function App() {
       <h1>COVER LETTER GENERATOR</h1>
       <label for="file-upload" className="button">{currentFile.name}</label>
       <input
+        ref={fileInputRef}
         id="file-upload"
         type="file"
         accept=".docx"
-        onClick={() => chrome.storage.session.clear()}
+        onClick={() => clearData(fileInputRef)}
         onChange={event => {
           event.target.files[0] ? setCurrentFile({ name: event.target.files[0].name, data: event.target.files[0] }) : 
             setCurrentFile(PLACEHOLDER_FILE);
@@ -99,7 +101,7 @@ export default function App() {
             <button
               className={Object.values(templateTargets).every(value => value !== "") ? "button cancel-button split" :
                 "button cancel-button single"}
-              onClick={() => chrome.storage.session.clear()}>
+              onClick={() => clearData(fileInputRef)}>
                 Cancel
             </button>
             <span className="horizontal-spacer" />
