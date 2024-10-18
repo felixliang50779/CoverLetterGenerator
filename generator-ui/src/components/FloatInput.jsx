@@ -16,7 +16,7 @@ const FloatInput = (props) => {
   const handleInputChange = async (target, value) => {
     chrome.storage.session.get(["templateTargets"], async (result) => {
       result.templateTargets[target] = value;
-      chrome.storage.session.set({ "templateTargets": result.templateTargets });
+      chrome.storage.session.set({ templateTargets: result.templateTargets });
     })
   };
 
