@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Card } from "antd";
 import { SelectOutlined } from "@ant-design/icons";
+import debounce from "debounce";
 
 // Internal Modules
 import { initializeTemplating, generateFile, clearData } from './helper';
@@ -62,7 +63,7 @@ export default function App() {
         id="file-upload"
         type="file"
         accept=".docx"
-        onClick={() => clearData(fileInputRef)}
+        onClick={debounce(() => clearData(fileInputRef), 500)}
         onChange={event => {
           event.target.files[0] ? setCurrentFile({ name: event.target.files[0].name, data: event.target.files[0] }) : 
             setCurrentFile(PLACEHOLDER_FILE);
@@ -110,7 +111,7 @@ export default function App() {
             <button
               className={Object.values(templateTargets).every(value => value !== "") ? 
                 "button confirm-button split" : "hidden button confirm-button"}
-              onClick={() => generateFile(currentFile, templateTargets)}>
+              onClick={debounce(() => generateFile(currentFile, templateTargets), 500)}>
                 Generate
             </button>
           </div>

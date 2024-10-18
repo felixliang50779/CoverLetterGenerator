@@ -14,6 +14,7 @@
     "antd": "^5.21.4",
     "buffer": "^6.0.3",
     "chrome-types": "^0.1.307",
+    "debounce": "^2.2.0",
     "docx-templates": "^4.13.0",
     "file-saver": "^2.0.5",
     "mammoth": "^1.8.0",
