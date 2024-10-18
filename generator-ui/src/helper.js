@@ -96,7 +96,7 @@ export async function getTemplateTargets(file, fileReader) {
     const targetArray = await parseFile(file, fileReader);
   
     // Strip the '%t' indicators
-    const processedTargetArray = targetArray.map(target => target.slice(2, -2));
+    const processedTargetArray = targetArray.map(target => target.slice(2, -2)).sort();
   
     // Reduce the array into an object with empty mappings
     const targetObj = processedTargetArray.reduce((obj, key) => {

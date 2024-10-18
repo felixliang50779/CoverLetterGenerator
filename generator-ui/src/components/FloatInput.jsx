@@ -3,17 +3,15 @@ import { Input } from "antd";
 
 import "./FloatInput.css";
 
+const { TextArea } = Input;
+
 const FloatInput = (props) => {
   const [focus, setFocus] = useState(false);
-  let { label, placeholder, target, value, type, required } = props;
-
-  if (!placeholder) placeholder = label;
+  let { label, target, value, type } = props;
 
   const isOccupied = focus || (value && value.length > 0);
 
   const labelClass = isOccupied ? "label as-label" : "label as-placeholder";
-
-  const requiredMark = required ? <span className="text-danger">*</span> : null;
 
   const handleInputChange = async (target, value) => {
     chrome.storage.session.get(["templateTargets"], async (result) => {
@@ -28,17 +26,16 @@ const FloatInput = (props) => {
       onBlur={() => setFocus(false)}
       onFocus={() => setFocus(true)}
     >
-      <Input
+      <TextArea
         size="large"
         value={value}
         onChange={event => handleInputChange(target, event.target.value)}
         type={type}
+        autoSize={true}
         style={{
           backgroundColor: "#1a1a1a"
         }}/>
-      <label className={labelClass}>
-        {isOccupied ? label : placeholder} {requiredMark}
-      </label>
+      <label className={labelClass}>{label}</label>
     </div>
   );
 };

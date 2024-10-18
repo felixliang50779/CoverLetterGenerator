@@ -24,6 +24,10 @@
     margin-left: -4px;
 }
 
+.ant-input {
+    color: #f8f8f2;
+}
+
 .ant-input-outlined:hover, .ant-input-outlined:focus {
     border-color: #646cff;
 }

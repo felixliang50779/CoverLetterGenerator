@@ -14,6 +14,7 @@ export default function App() {
   // Constants
   const PLACEHOLDER_FILE = { name: "Choose a File (.docx)", data: {} };
   const FILE_READER = new FileReader();
+  const MAX_LABEL_LENGTH = 45;
 
   const [currentFile, setCurrentFile] = useState(PLACEHOLDER_FILE);
   const [templateTargets, setTemplateTargets] = useState({});
@@ -89,8 +90,7 @@ export default function App() {
                       target={target}
                       value={value}
                       setTemplateTargets={setTemplateTargets}
-                      label={target}
-                      placeholder={target}
+                      label={target.length >= MAX_LABEL_LENGTH ? target.slice(0, MAX_LABEL_LENGTH) + "..." : target}
                       type="text" />
                   );
                 })
