@@ -22,6 +22,8 @@ export default function App() {
   const [templateTargets, setTemplateTargets] = useState({});
   const [currentlySelected, setCurrentlySelected] = useState("");
 
+  const [invalidState, setInvalidState] = useState(false);
+
   const fileInputRef = useRef();
 
   // Every time the extension popup is opened
@@ -57,65 +59,71 @@ export default function App() {
   return (
     <div className="container">
       <h1>COVER LETTER GENERATOR</h1>
-      <label for="file-upload" className="button">{currentFile.name}</label>
+      <label for="file-upload" className="button single">{currentFile.name}</label>
       <input
         ref={fileInputRef}
         id="file-upload"
         type="file"
         accept=".docx"
-        onClick={debounce(() => clearData(fileInputRef), 500)}
+        onClick={() => clearData(fileInputRef, setInvalidState)}
         onChange={event => {
           event.target.files[0] ? setCurrentFile({ name: event.target.files[0].name, data: event.target.files[0] }) : 
             setCurrentFile(PLACEHOLDER_FILE);
         }}/>
       <span className="vertical-spacer" />
-      {!Object.keys(templateTargets).length ?
-        <button
-          className={currentFile.name === PLACEHOLDER_FILE.name ?
-            'hidden button confirm-button' : 'button confirm-button'}
-          onClick={() => initializeTemplating(currentFile, FILE_READER)}>
-            Parse
-        </button> :
-        <div className="secondary-container">
-          <Card title="Templated Items">
-            {
-              Object.entries(templateTargets).map(([target, value]) => {
-                return (
-                  <div className="input-group">
-                    <FloatInput
-                      target={target}
-                      value={value}
-                      setTemplateTargets={setTemplateTargets}
-                      currentlySelected={currentlySelected}
-                      label={target.length >= MAX_LABEL_LENGTH ? target.slice(0, MAX_LABEL_LENGTH) + "..." : target}
-                      type="text" />
-                    <button
-                      className="button toggle-button"
-                      onClick={() => chrome.storage.session.set({ currentlySelected: target })}>
-                        <SelectOutlined />
-                    </button>
-                  </div>
-                );
-              })
-            } 
-          </Card>
-          <span className='vertical-spacer' />
-          <div className="button-group">
-            <button
-              className={Object.values(templateTargets).every(value => value !== "") ? "button cancel-button split" :
-                "button cancel-button single"}
-              onClick={() => clearData(fileInputRef)}>
-                Cancel
-            </button>
-            <span className="horizontal-spacer" />
-            <button
-              className={Object.values(templateTargets).every(value => value !== "") ? 
-                "button confirm-button split" : "hidden button confirm-button"}
-              onClick={debounce(() => generateFile(currentFile, templateTargets), 500)}>
-                Generate
-            </button>
+      {
+        !invalidState
+        ?
+        (!Object.keys(templateTargets).length ?
+          <button
+            className={currentFile.name === PLACEHOLDER_FILE.name ?
+              'hidden button confirm-button' : 'button confirm-button'}
+            onClick={() => initializeTemplating(currentFile, FILE_READER, setInvalidState)}>
+              Parse
+          </button> :
+          <div className="secondary-container">
+            <Card title="Templated Items">
+              {
+                Object.entries(templateTargets).map(([target, value]) => {
+                  return (
+                    <div className="input-group">
+                      <FloatInput
+                        target={target}
+                        value={value}
+                        setTemplateTargets={setTemplateTargets}
+                        currentlySelected={currentlySelected}
+                        label={target.length >= MAX_LABEL_LENGTH ? target.slice(0, MAX_LABEL_LENGTH) + "..." : target}
+                        type="text" />
+                      <button
+                        className="button toggle-button"
+                        onClick={() => chrome.storage.session.set({ currentlySelected: target })}>
+                          <SelectOutlined />
+                      </button>
+                    </div>
+                  );
+                })
+              } 
+            </Card>
+            <span className='vertical-spacer' />
+            <div className="button-group">
+              <button
+                className={Object.values(templateTargets).every(value => value !== "") ? "button cancel-button split" :
+                  "button cancel-button single"}
+                onClick={() => clearData(fileInputRef, setInvalidState)}>
+                  Cancel
+              </button>
+              <span className="horizontal-spacer" />
+              <button
+                className={Object.values(templateTargets).every(value => value !== "") ? 
+                  "button confirm-button split" : "hidden button confirm-button"}
+                onClick={debounce(() => generateFile(currentFile, templateTargets), 500)}>
+                  Generate
+              </button>
+            </div>
           </div>
-        </div>
+        )
+        :
+        <h2 className="error-text">invalid file type or template</h2>
       }
     </div>
   )

@@ -15,19 +15,19 @@
         "suggested-key": {
           "default": "Alt+W"
         },
-        "description": "Set current template target to selected text from the active tab"
+        "description": "Assign from the selected text"
       },
       "toggle-previous-select": {
         "suggested-key": {
           "default": "Alt+Q"
         },
-        "description": "Switch to the previous template target"
+        "description": "Switch to the previous target"
       },
       "toggle-next-select": {
         "suggested-key": {
           "default": "Alt+E"
         },
-        "description": "Switch to the next template target"
+        "description": "Switch to the next target"
       }
     }
 }

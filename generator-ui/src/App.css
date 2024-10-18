@@ -119,6 +119,7 @@ input[type="file"] {
   cursor: pointer;
   text-overflow: ellipsis;
   overflow: hidden;
+  white-space: nowrap;
   transition: border-color 0.25s;
 }
 
@@ -132,6 +133,10 @@ input[type="file"] {
 
 .split {
   width: 100%;
+}
+
+.error-text {
+  color: #ff5555;
 }
 
 .button:hover {

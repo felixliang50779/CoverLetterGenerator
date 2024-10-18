@@ -63,7 +63,7 @@ async function displayNotification(title, message, icon) {
         }
     )
 
-    setTimeout(() => chrome.notifications.clear(notification), 2000);
+    setTimeout(() => chrome.notifications.clear(notification), 1250);
 }
 
 //The following code to get the selection is from an answer to "Get the
