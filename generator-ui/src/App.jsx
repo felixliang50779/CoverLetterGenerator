@@ -1,6 +1,7 @@
 // External Modules
 import { useState, useEffect, useRef } from 'react';
 import { Card } from "antd";
+import { SelectOutlined } from "@ant-design/icons";
 
 // Internal Modules
 import { initializeTemplating, generateFile, clearData } from './helper';
@@ -18,23 +19,21 @@ export default function App() {
 
   const [currentFile, setCurrentFile] = useState(PLACEHOLDER_FILE);
   const [templateTargets, setTemplateTargets] = useState({});
-
-  // will include 'currentlySelected' and 'numTargets' properties
-  const [templateMetadata, setTemplateMetadata] = useState({});
+  const [currentlySelected, setCurrentlySelected] = useState("");
 
   const fileInputRef = useRef();
 
   // Every time the extension popup is opened
   useEffect(async () => {
     // Initialize UI state using data from DB
-    chrome.storage.session.get(["currentFile", "templateTargets", "templateMetadata"], result => {
+    chrome.storage.session.get(["currentFile", "templateTargets", "currentlySelected"], result => {
       console.log(result.currentFile);
       console.log(result.templateTargets);
-      console.log(result.templateMetadata);
+      console.log(result.currentlySelected);
 
       result.currentFile !== undefined ? setCurrentFile(result.currentFile) : setCurrentFile(PLACEHOLDER_FILE);
       result.templateTargets !== undefined ? setTemplateTargets(result.templateTargets) : setTemplateTargets({});
-      result.templateMetadata !== undefined ? setTemplateMetadata(result.templateMetadata) : setTemplateMetadata({});
+      result.currentlySelected !== undefined ? setCurrentlySelected(result.currentlySelected) : setCurrentlySelected("");
     });
 
     // Attach listener for future storage onChange events
@@ -47,9 +46,9 @@ export default function App() {
         changes.templateTargets.newValue !== undefined ? setTemplateTargets(changes.templateTargets.newValue) :
           setTemplateTargets({});
       }
-      if ("templateMetadata" in changes) {
-        changes.templateMetadata.newValue !== undefined ? setTemplateMetadata(changes.templateMetadata.newValue) :
-          setTemplateMetadata({});
+      if ("currentlySelected" in changes) {
+        changes.currentlySelected.newValue !== undefined ? setCurrentlySelected(changes.currentlySelected.newValue) :
+          setCurrentlySelected("");
       }
     });
   }, []);
@@ -77,24 +76,27 @@ export default function App() {
             Parse
         </button> :
         <div className="secondary-container">
-          <Card
-            title="Templated Items"
-            style={{ 
-              textAlign: 'left',
-              backgroundColor: "#1a1a1a"
-            }} >
-              {
-                Object.entries(templateTargets).map(([target, value]) => {
-                  return (
+          <Card title="Templated Items">
+            {
+              Object.entries(templateTargets).map(([target, value]) => {
+                return (
+                  <div className="input-group">
                     <FloatInput
                       target={target}
                       value={value}
                       setTemplateTargets={setTemplateTargets}
+                      currentlySelected={currentlySelected}
                       label={target.length >= MAX_LABEL_LENGTH ? target.slice(0, MAX_LABEL_LENGTH) + "..." : target}
                       type="text" />
-                  );
-                })
-              } 
+                    <button
+                      className="button toggle-button"
+                      onClick={() => chrome.storage.session.set({ currentlySelected: target })}>
+                        <SelectOutlined />
+                    </button>
+                  </div>
+                );
+              })
+            } 
           </Card>
           <span className='vertical-spacer' />
           <div className="button-group">

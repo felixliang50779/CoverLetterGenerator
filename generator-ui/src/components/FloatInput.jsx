@@ -3,11 +3,11 @@ import { Input } from "antd";
 
 import "./FloatInput.css";
 
-const { TextArea } = Input;
+// const { TextArea } = Input;
 
 const FloatInput = (props) => {
   const [focus, setFocus] = useState(false);
-  let { label, target, value, type } = props;
+  let { label, target, value, currentlySelected, type } = props;
 
   const isOccupied = focus || (value && value.length > 0);
 
@@ -22,19 +22,16 @@ const FloatInput = (props) => {
 
   return (
     <div
-      className="float-label"
+      className='float-label'
       onBlur={() => setFocus(false)}
       onFocus={() => setFocus(true)}
     >
-      <TextArea
+      <Input
+        className={currentlySelected === target && "selected"}
         size="large"
         value={value}
         onChange={event => handleInputChange(target, event.target.value)}
-        type={type}
-        autoSize={true}
-        style={{
-          backgroundColor: "#1a1a1a"
-        }}/>
+        type={type}/>
       <label className={labelClass}>{label}</label>
     </div>
   );

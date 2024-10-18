@@ -25,9 +25,15 @@
 }
 
 .ant-input {
+    background-color: #1a1a1a !important;
     color: #f8f8f2;
+    width: 155%;
 }
 
 .ant-input-outlined:hover, .ant-input-outlined:focus {
+    border-color: #646cff;
+}
+
+.selected {
     border-color: #646cff;
 }

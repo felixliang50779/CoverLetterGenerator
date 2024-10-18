@@ -66,8 +66,7 @@ export async function initializeTemplating(currentFile, fileReader) {
     // Update DB
     dbUpdates.push(chrome.storage.session.set({ currentFile: { name: currentFile.name, data: base64File } }));
     dbUpdates.push(chrome.storage.session.set({ templateTargets: targetObj }));
-    dbUpdates.push(chrome.storage.session.set(
-      { templateMetadata: { currentlySelected: targetArray[0], numTargets: targetArray.length } }));
+    dbUpdates.push(chrome.storage.session.set({ currentlySelected: targetArray[0] }));
 
 
     // Resolve DB updates concurrently

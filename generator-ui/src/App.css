@@ -22,10 +22,16 @@ body {
 
 }
 
+.ant-card {
+  text-align: left;
+  background-color: #1a1a1a;
+}
+
 .ant-card-body {
   display: flex;
   flex-direction: column;
   gap: 1.5em;
+  padding-right: 0 !important;
   padding-top: 0.1em !important;
   padding-bottom: 0.1em !important;
   max-height: 20em;
@@ -91,6 +97,16 @@ input[type="file"] {
   justify-content: space-between;
 }
 
+.input-group {
+  display: flex;
+  flex-direction: row;
+  gap: 9em;
+}
+
+.anticon {
+  padding: 0.6em;
+}
+
 .button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -104,6 +120,10 @@ input[type="file"] {
   text-overflow: ellipsis;
   overflow: hidden;
   transition: border-color 0.25s;
+}
+
+.toggle-button {
+  padding: 0;
 }
 
 .single {
