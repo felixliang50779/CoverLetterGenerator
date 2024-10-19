@@ -5,7 +5,7 @@ import { SelectOutlined } from "@ant-design/icons";
 import debounce from "debounce";
 
 // Internal Modules
-import { initializeTemplating, generateFile, clearData } from './helper';
+import { initializeTemplating, generateFile, clearData } from './scripts/helper';
 import FloatInput from './components/FloatInput';
 
 // Styling
@@ -30,9 +30,10 @@ export default function App() {
   useEffect(async () => {
     // Initialize UI state using data from DB
     chrome.storage.session.get(["currentFile", "templateTargets", "currentlySelected"], result => {
-      console.log(result.currentFile);
-      console.log(result.templateTargets);
-      console.log(result.currentlySelected);
+      // LOGGING
+      // console.log(result.currentFile);
+      // console.log(result.templateTargets);
+      // console.log(result.currentlySelected);
 
       result.currentFile !== undefined ? setCurrentFile(result.currentFile) : setCurrentFile(PLACEHOLDER_FILE);
       result.templateTargets !== undefined ? setTemplateTargets(result.templateTargets) : setTemplateTargets({});

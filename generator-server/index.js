@@ -1,12 +1,10 @@
 import { createReport } from "docx-templates";
 import base64 from 'base64-arraybuffer';
 import express from "express";
-import dotenv from "dotenv";  // REMOVE FOR PROD
-
-// REMOVE FOR PROD
-dotenv.config();
 
 const app = express();
+
+const app_port = process.env.PORT || 8080;
 
 app.use(express.json());
 
@@ -23,6 +21,7 @@ app.use((req, res, next) => {
 app.post("/generateFileHandler", async (req, res) => {
     const arrayBuffer = base64.decode(req.body.template);
 
+    // Rewriting template targets in file
     const buffer = await createReport({
         template: arrayBuffer,
         data: req.body.data,
@@ -32,11 +31,11 @@ app.post("/generateFileHandler", async (req, res) => {
     res.send({ completedFile: base64.encode(buffer) });
 });
 
-app.listen(process.env.PORT, error => {
+app.listen(app_port, error => {
     if (!error) {
-        console.log(`Server is Successfully Running, App listening on port ${process.env.PORT}`);
+        console.log(`Server is Successfully Running, App listening on port ${app_port}`);
     }
     else {
-        console.log(`Error occurred, server can't start due to ${error}`);
+        console.log(`Server failed to start - ${error}`);
     }
 });

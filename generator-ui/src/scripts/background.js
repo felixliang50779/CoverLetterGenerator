@@ -15,12 +15,12 @@ chrome.commands.onCommand.addListener(async function (command) {
                             displayNotification(
                                 "Ready to Generate!",
                                 `Set value "${text}" for target ${currentlySelected}`,
-                                "./success-icon.png"
+                                "success-icon.png"
                             )
                             :
                             displayNotification(
                                 "Success!", `Set value "${text}" for target ${currentlySelected}`,
-                                "./success-icon.png"
+                                "success-icon.png"
                             );
                     });
                 });
@@ -43,7 +43,8 @@ chrome.commands.onCommand.addListener(async function (command) {
         
                 chrome.storage.session.set({ currentlySelected: newTarget }, () => {
                     displayNotification("Attention", 
-                        `Now selecting for ${newTarget}: ${result.templateTargets[newTarget]}`, "./alert-icon.png");
+                        `Now selecting for ${newTarget}: ${result.templateTargets[newTarget]}`, 
+                            "alert-icon.png");
                 });
             }
         });

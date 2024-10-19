@@ -9,8 +9,36 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: 'public/manifest.json',
+          src: 'manifest.json',
           dest: '.',
+        },
+        {
+          src: 'src/scripts/background.js',
+          dest: '.'
+        },
+        {
+          src: 'src/assets/images/icon16.png',
+          dest: '.'
+        },
+        {
+          src: 'src/assets/images/icon32.png',
+          dest: '.'
+        },
+        {
+          src: 'src/assets/images/icon48.png',
+          dest: '.'
+        },
+        {
+          src: 'src/assets/images/icon128.png',
+          dest: '.'
+        },
+        {
+          src: 'src/assets/images/alert-icon.png',
+          dest: '.'
+        },
+        {
+          src: 'src/assets/images/success-icon.png',
+          dest: '.'
         }
       ],
     })
@@ -19,7 +47,7 @@ export default defineConfig({
     outDir: 'build',
     rollupOptions: {
       input: {
-        main: './index.html'
+        main: 'index.html'
       }
     }
   }
