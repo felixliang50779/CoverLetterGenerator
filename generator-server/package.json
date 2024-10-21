@@ -4,8 +4,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "docker-build": "docker build -t generator-server-image -f Dockerfile .",
+    "docker-run": "docker run -t -p 8080:8080 --name generator-server generator-server-image"
   },
   "keywords": [],
   "author": "",
