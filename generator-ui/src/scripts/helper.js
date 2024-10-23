@@ -91,7 +91,7 @@ export async function initializeTemplating(currentFile, fileReader, setInvalidSt
 }
   
 export async function generateFile(file, targets) {
-  const response = await fetch("https://generator-server-838407650486.us-central1.run.app/generateFileHandler", {
+  const response = await fetch("http://localhost:8080/generateFileHandler", {
     headers: {
       "Content-Type": "application/json"
     },
