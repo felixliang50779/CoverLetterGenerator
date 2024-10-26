@@ -1,42 +1,38 @@
 // External Modules
 import { useState, useEffect, useRef } from 'react';
 import { Card } from "antd";
+import { SelectOutlined } from "@ant-design/icons";
+import debounce from "debounce";
 
 // Internal Modules
-import { initializeTemplating, generateFile, clearData } from './helper';
-import FloatInput from './components/FloatInput';
+import { initializeTemplating } from './scripts/helper';
+import FileUpload from './components/FileUpload';
+import TemplateItems from './components/TemplateItems';
+import ButtonGroup from './components/ButtonGroup';
 
 // Styling
 import './App.css';
 
 
+// App Component
 export default function App() {
-  // Constants
   const PLACEHOLDER_FILE = { name: "Choose a File (.docx)", data: {} };
   const FILE_READER = new FileReader();
 
   const [currentFile, setCurrentFile] = useState(PLACEHOLDER_FILE);
   const [templateTargets, setTemplateTargets] = useState({});
-
-  // will include 'currentlySelected' and 'numTargets' properties
-  const [templateMetadata, setTemplateMetadata] = useState({});
+  const [currentlySelected, setCurrentlySelected] = useState("");
+  const [invalidState, setInvalidState] = useState(false);
 
   const fileInputRef = useRef();
 
-  // Every time the extension popup is opened
-  useEffect(async () => {
-    // Initialize UI state using data from DB
-    chrome.storage.session.get(["currentFile", "templateTargets", "templateMetadata"], result => {
-      console.log(result.currentFile);
-      console.log(result.templateTargets);
-      console.log(result.templateMetadata);
-
+  useEffect(() => {
+    chrome.storage.session.get(["currentFile", "templateTargets", "currentlySelected"], result => {
       result.currentFile !== undefined ? setCurrentFile(result.currentFile) : setCurrentFile(PLACEHOLDER_FILE);
       result.templateTargets !== undefined ? setTemplateTargets(result.templateTargets) : setTemplateTargets({});
-      result.templateMetadata !== undefined ? setTemplateMetadata(result.templateMetadata) : setTemplateMetadata({});
+      result.currentlySelected !== undefined ? setCurrentlySelected(result.currentlySelected) : setCurrentlySelected("");
     });
 
-    // Attach listener for future storage onChange events
     chrome.storage.session.onChanged.addListener((changes, namespace) => {
       if ("currentFile" in changes) {
         changes.currentFile.newValue !== undefined ? setCurrentFile(changes.currentFile.newValue) :
@@ -46,9 +42,9 @@ export default function App() {
         changes.templateTargets.newValue !== undefined ? setTemplateTargets(changes.templateTargets.newValue) :
           setTemplateTargets({});
       }
-      if ("templateMetadata" in changes) {
-        changes.templateMetadata.newValue !== undefined ? setTemplateMetadata(changes.templateMetadata.newValue) :
-          setTemplateMetadata({});
+      if ("currentlySelected" in changes) {
+        changes.currentlySelected.newValue !== undefined ? setCurrentlySelected(changes.currentlySelected.newValue) :
+          setCurrentlySelected("");
       }
     });
   }, []);
@@ -56,64 +52,41 @@ export default function App() {
   return (
     <div className="container">
       <h1>COVER LETTER GENERATOR</h1>
-      <label for="file-upload" className="button">{currentFile.name}</label>
-      <input
-        ref={fileInputRef}
-        id="file-upload"
-        type="file"
-        accept=".docx"
-        onClick={() => clearData(fileInputRef)}
-        onChange={event => {
-          event.target.files[0] ? setCurrentFile({ name: event.target.files[0].name, data: event.target.files[0] }) : 
-            setCurrentFile(PLACEHOLDER_FILE);
-        }}/>
+      <FileUpload
+        currentFile={currentFile}
+        setCurrentFile={setCurrentFile}
+        fileInputRef={fileInputRef}
+        setInvalidState={setInvalidState}
+      />
       <span className="vertical-spacer" />
-      {!Object.keys(templateTargets).length ?
-        <button
-          className={currentFile.name === PLACEHOLDER_FILE.name ?
-            'hidden button confirm-button' : 'button confirm-button'}
-          onClick={() => initializeTemplating(currentFile, FILE_READER)}>
-            Parse
-        </button> :
-        <div className="secondary-container">
-          <Card
-            title="Templated Items"
-            style={{ 
-              textAlign: 'left',
-              backgroundColor: "#1a1a1a"
-            }} >
-              {
-                Object.entries(templateTargets).map(([target, value]) => {
-                  return (
-                    <FloatInput
-                      target={target}
-                      value={value}
-                      setTemplateTargets={setTemplateTargets}
-                      label={target}
-                      placeholder={target}
-                      type="text" />
-                  );
-                })
-              } 
-          </Card>
-          <span className='vertical-spacer' />
-          <div className="button-group">
-            <button
-              className={Object.values(templateTargets).every(value => value !== "") ? "button cancel-button split" :
-                "button cancel-button single"}
-              onClick={() => clearData(fileInputRef)}>
-                Cancel
-            </button>
-            <span className="horizontal-spacer" />
-            <button
-              className={Object.values(templateTargets).every(value => value !== "") ? 
-                "button confirm-button split" : "hidden button confirm-button"}
-              onClick={() => generateFile(currentFile, templateTargets)}>
-                Generate
-            </button>
+      {
+        !invalidState
+        ?
+        (!Object.keys(templateTargets).length ?
+          <button
+            className={currentFile.name === PLACEHOLDER_FILE.name ?
+              'hidden button confirm-button' : 'button confirm-button'}
+            onClick={() => initializeTemplating(currentFile, FILE_READER, setInvalidState)}>
+              Parse
+          </button> :
+          <div className="secondary-container">
+            <TemplateItems
+              templateTargets={templateTargets}
+              setTemplateTargets={setTemplateTargets}
+              currentlySelected={currentlySelected}
+            />
+            <span className='vertical-spacer' />
+            <ButtonGroup
+              templateTargets={templateTargets}
+              fileInputRef={fileInputRef}
+              setInvalidState={setInvalidState}
+              currentFile={currentFile}
+            />
           </div>
-        </div>
+        )
+        :
+        <h2 className="error-text">invalid file type or template</h2>
       }
     </div>
-  )
+  );
 }

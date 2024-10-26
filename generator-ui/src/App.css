@@ -22,10 +22,16 @@ body {
 
 }
 
+.ant-card {
+  text-align: left;
+  background-color: #1a1a1a;
+}
+
 .ant-card-body {
   display: flex;
   flex-direction: column;
   gap: 1.5em;
+  padding-right: 0 !important;
   padding-top: 0.1em !important;
   padding-bottom: 0.1em !important;
   max-height: 20em;
@@ -52,10 +58,6 @@ body {
 .ant-card-head-title {
   color: #f8f8f2;
   font-size: 0.9em;
-}
-
-.ant-input {
-  color: #f8f8f2;
 }
 
 h1 {
@@ -95,6 +97,16 @@ input[type="file"] {
   justify-content: space-between;
 }
 
+.input-group {
+  display: flex;
+  flex-direction: row;
+  gap: 9em;
+}
+
+.anticon {
+  padding: 0.6em;
+}
+
 .button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -104,10 +116,16 @@ input[type="file"] {
   font-weight: 500;
   font-family: inherit;
   background-color: #1a1a1a;
+  color: #f8f8f2;
   cursor: pointer;
   text-overflow: ellipsis;
   overflow: hidden;
+  white-space: nowrap;
   transition: border-color 0.25s;
+}
+
+.toggle-button {
+  padding: 0;
 }
 
 .single {
@@ -116,6 +134,10 @@ input[type="file"] {
 
 .split {
   width: 100%;
+}
+
+.error-text {
+  color: #ff5555;
 }
 
 .button:hover {

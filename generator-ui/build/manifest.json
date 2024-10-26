@@ -1,7 +1,13 @@
 {
     "manifest_version": 3,
     "name": "Cover Letter Generator",
-    "version": "1.0.0",
+    "icons": {
+      "16": "icon16.png",
+      "32": "icon32.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    },
+    "version": "1.0.1",
     "action": {
       "default_popup": "index.html"
     },
@@ -15,19 +21,19 @@
         "suggested-key": {
           "default": "Alt+W"
         },
-        "description": "Set current template target to selected text from the active tab"
+        "description": "Assign from the selected text"
       },
       "toggle-previous-select": {
         "suggested-key": {
           "default": "Alt+Q"
         },
-        "description": "Switch to the previous template target"
+        "description": "Switch to the previous target"
       },
       "toggle-next-select": {
         "suggested-key": {
           "default": "Alt+E"
         },
-        "description": "Switch to the next template target"
+        "description": "Switch to the next target"
       }
     }
 }
