@@ -91,20 +91,25 @@ export async function initializeTemplating(currentFile, fileReader, setInvalidSt
 }
   
 export async function generateFile(file, targets) {
-  const response = await fetch("http://localhost:8080/generateFileHandler", {
-    headers: {
-      "Content-Type": "application/json"
-    },
-    method: "POST",
-    body: JSON.stringify({ data: targets, template: file.data })
+  chrome.management.getSelf(async (self) => {
+    const response = await fetch(self.installType === "development" ?
+      "http://localhost:8080/generateFileHandler"
+      :
+      "https://generator-server-838407650486.us-central1.run.app", {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "POST",
+      body: JSON.stringify({ data: targets, template: file.data })
+    });
+  
+    const base64Response = (await response.json()).completedFile;
+    const buffer = Buffer.from(base64Response, 'base64');
+    const fileBlob = new Blob ([buffer], 
+      { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+  
+    saveAs(fileBlob, `Modified ${file.name}`);
   });
-
-  const base64Response = (await response.json()).completedFile;
-  const buffer = Buffer.from(base64Response, 'base64');
-  const fileBlob = new Blob ([buffer], 
-    { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
-
-  saveAs(fileBlob, `Modified ${file.name}`);
 }
   
 export async function getTemplateTargets(file, fileReader, setInvalidState) {

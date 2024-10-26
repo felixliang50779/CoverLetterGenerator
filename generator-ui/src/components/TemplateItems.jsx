@@ -1,5 +1,4 @@
 // External Modules
-import { useState, useEffect, useRef } from 'react';
 import { Card } from "antd";
 import { SelectOutlined } from "@ant-design/icons";
 import FloatInput from './FloatInput';
