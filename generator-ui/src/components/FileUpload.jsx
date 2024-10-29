@@ -5,7 +5,7 @@ import { clearData } from '../scripts/helper';
 import '../App.css';
 
 // FileUpload Component
-const FileUpload = ({ currentFile, setCurrentFile, fileInputRef, setInvalidState }) =>{
+const FileUpload = ({ currentFile, setCurrentFile, fileInputRef, setInvalidState, placeholderFile }) =>{
     return (
       <>
         <label htmlFor="file-upload" className="button single">{currentFile.name}</label>
@@ -17,7 +17,7 @@ const FileUpload = ({ currentFile, setCurrentFile, fileInputRef, setInvalidState
           onClick={() => clearData(fileInputRef, setInvalidState)}
           onChange={event => {
             event.target.files[0] ? setCurrentFile({ name: event.target.files[0].name, data: event.target.files[0] }) : 
-              setCurrentFile(PLACEHOLDER_FILE);
+              setCurrentFile(placeholderFile);
           }}/>
       </>
     );

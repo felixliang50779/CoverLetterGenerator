@@ -57,6 +57,7 @@ export default function App() {
         setCurrentFile={setCurrentFile}
         fileInputRef={fileInputRef}
         setInvalidState={setInvalidState}
+        placeholderFile={PLACEHOLDER_FILE}
       />
       <span className="vertical-spacer" />
       {

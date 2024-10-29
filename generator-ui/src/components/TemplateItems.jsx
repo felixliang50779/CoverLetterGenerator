@@ -11,6 +11,7 @@ import '../App.css';
 // TemplateItems Component
 const TemplateItems = ({ templateTargets, setTemplateTargets, currentlySelected }) => {
     const MAX_LABEL_LENGTH = 45;
+    
     return (
       <Card title="Templated Items">
         {
