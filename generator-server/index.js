@@ -1,4 +1,5 @@
 import { createReport } from "docx-templates";
+import { rateLimit } from "express-rate-limit";
 import base64 from 'base64-arraybuffer';
 import express from "express";
 
@@ -7,11 +8,20 @@ const expected_origin = process.env.NODE_ENV === "production" ?
     :
     "chrome-extension://coclhjligokibmfjkdgkiopecoldfjnl";
 
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+    standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+});
+
 const app = express();
 
 const app_port = process.env.PORT || 8080;
 
 app.use(express.json());
+
+app.use(limiter);
 
 // Enable CORS
 app.use((req, res, next) => {
