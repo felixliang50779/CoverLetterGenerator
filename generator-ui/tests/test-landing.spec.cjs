@@ -1,11 +1,9 @@
-const { test, chromium } = require('@playwright/test');
-const path = require('path');
+import { test, chromium } from "@playwright/test";
 
 test('test landing page', async ({ page }) => {
-  const pathToExtension = (path.dirname(__dirname));
-  console.log(`Path to extension: ${pathToExtension}`);
-  const userDataDir = '/tmp/test-user-data-dir';
-  const browserContext = await chromium.launchPersistentContext(userDataDir, {
+  const pathToExtension = `${process.cwd()}/generator-ui/build`;
+
+  const browserContext = await chromium.launchPersistentContext('', {
     headless: false,
     args: [
       `--disable-extensions-except=${pathToExtension}`,
