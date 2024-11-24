@@ -3,37 +3,17 @@ import { Input } from "antd";
 
 import "./FloatInput.css";
 
-
-// import Modal from './Modal';
-
-const { TextArea } = Input;
-
 const FloatInput = (props) => {
   const [focus, setFocus] = useState(false);
-  let { label, target, value, currentlySelected, type } = props;
+  let { label, target, value, templateTargets, currentlySelected, type } = props;
 
   const isOccupied = focus || (value && value.length > 0);
 
   const labelClass = isOccupied ? "label as-label" : "label as-placeholder";
 
-    // // Modal State Variables
-    // const [isModalOpen, setModalOpen] = useState(false);
-    // const [modalMessage, setModalMessage] = useState('');
-  
-    //   // Modal Event Handler Function
-    //   const handleUpdate = () => {
-    //     // Perform some update logic
-    //     setModalMessage('State updated successfully!');
-    //     setModalOpen(true); // Open modal
-    //     console.log("ran modal function");
-    //   };
-
   const handleInputChange = async (target, value) => {
-    chrome.storage.session.get(["templateTargets"], async (result) => {
-      result.templateTargets[target] = value;
-      chrome.storage.session.set({ templateTargets: result.templateTargets });
-    })
-    // handleUpdate();
+    templateTargets[target] = value;
+    chrome.storage.session.set({ templateTargets: templateTargets });
   };
 
   return (
@@ -49,11 +29,6 @@ const FloatInput = (props) => {
         onChange={event => handleInputChange(target, event.target.value)}
         type={type}/>
       <label className={labelClass}>{label}</label>
-      {/* <Modal 
-        isOpen={isModalOpen} 
-        onClose={() => setModalOpen(false)} 
-        message={modalMessage} 
-      /> */}
     </div>
   );
 };

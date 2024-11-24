@@ -20,7 +20,7 @@ const TemplateItems = ({ templateTargets, setTemplateTargets, currentlySelected 
               <FloatInput
                 target={target}
                 value={value}
-                setTemplateTargets={setTemplateTargets}
+                templateTargets={templateTargets}
                 currentlySelected={currentlySelected}
                 label={target.length >= MAX_LABEL_LENGTH ? target.slice(0, MAX_LABEL_LENGTH) + "..." : target}
                 type="text" />
