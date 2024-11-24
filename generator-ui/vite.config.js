@@ -17,6 +17,10 @@ export default defineConfig({
           dest: '.'
         },
         {
+          src: 'src/scripts/content.js',
+          dest: '.'
+        },
+        {
           src: 'src/assets/images/icon16.png',
           dest: '.'
         },
