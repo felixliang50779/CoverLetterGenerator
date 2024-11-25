@@ -1,41 +1,48 @@
 {
   "../../../../@crx/manifest": {
-    "file": "assets/crx-manifest.js-Dp1hhF6v.js",
+    "file": "assets/crx-manifest.js-DmlsBJLD.js",
     "name": "crx-manifest.js",
     "src": "../../../../@crx/manifest",
     "isEntry": true
   },
-  "_jsx-runtime-BmFbl-DQ.js": {
-    "file": "assets/jsx-runtime-BmFbl-DQ.js",
-    "name": "jsx-runtime"
+  "_FloatInput-!~{004}~.js": {
+    "file": "assets/FloatInput-BbGhJUn8.css",
+    "src": "_FloatInput-!~{004}~.js"
   },
-  "content-script/src/index.jsx": {
-    "file": "assets/index.jsx-OwQLsiUB.js",
-    "name": "index.jsx",
-    "src": "content-script/src/index.jsx",
+  "_FloatInput-64by_1X_.js": {
+    "file": "assets/FloatInput-64by_1X_.js",
+    "name": "FloatInput",
+    "css": [
+      "assets/FloatInput-BbGhJUn8.css"
+    ]
+  },
+  "content-script/src/main.jsx": {
+    "file": "assets/main.jsx-yc-qj08G.js",
+    "name": "main.jsx",
+    "src": "content-script/src/main.jsx",
     "isEntry": true,
     "imports": [
-      "_jsx-runtime-BmFbl-DQ.js"
+      "_FloatInput-64by_1X_.js"
     ]
   },
   "index.html": {
-    "file": "assets/index.html-CHYc-vTX.js",
+    "file": "assets/index.html-T26gpYZg.js",
     "name": "index.html",
     "src": "index.html",
     "isEntry": true,
     "imports": [
-      "_jsx-runtime-BmFbl-DQ.js"
+      "_FloatInput-64by_1X_.js"
     ],
     "css": [
-      "assets/index-D_GQejAJ.css"
+      "assets/index-CX030UUv.css"
     ]
   },
-  "index.jsx-loader.js": {
-    "file": "assets/index.jsx-loader-BN9BurR6.js",
-    "src": "index.jsx-loader.js"
+  "main.jsx-loader.js": {
+    "file": "assets/main.jsx-loader-BxCloGOc.js",
+    "src": "main.jsx-loader.js"
   },
   "src/scripts/background.js": {
-    "file": "assets/background.js-B7pJ6RlR.js",
+    "file": "assets/background.js-DMNBF9kc.js",
     "name": "background.js",
     "src": "src/scripts/background.js",
     "isEntry": true

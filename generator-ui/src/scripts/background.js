@@ -1,3 +1,5 @@
+chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
+
 // Extension shortcuts listener
 chrome.commands.onCommand.addListener(async function (command) {
     if (command === "get-selected-text") {

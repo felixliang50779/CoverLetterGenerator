@@ -24,12 +24,15 @@
   "content_scripts": [
     {
       "js": [
-        "assets/index.jsx-loader-BN9BurR6.js"
+        "assets/main.jsx-loader-BxCloGOc.js"
       ],
       "matches": [
         "<all_urls>"
       ],
-      "type": "module"
+      "type": "module",
+      "css": [
+        "assets/FloatInput-BbGhJUn8.css"
+      ]
     }
   ],
   "commands": {
@@ -58,8 +61,8 @@
         "<all_urls>"
       ],
       "resources": [
-        "assets/jsx-runtime-BmFbl-DQ.js",
-        "assets/index.jsx-OwQLsiUB.js"
+        "assets/FloatInput-64by_1X_.js",
+        "assets/main.jsx-yc-qj08G.js"
       ],
       "use_dynamic_url": false
     }
