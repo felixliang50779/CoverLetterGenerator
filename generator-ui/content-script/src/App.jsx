@@ -51,7 +51,7 @@ export default function App() {
         // and <Draggable /> will be wrapped with something like <Collapsible /> 
         <FloatInput
             target={currentlySelected}
-            value={templateTargets.currentlySelected}
+            value={templateTargets[currentlySelected]}
             templateTargets={templateTargets}
             currentlySelected={"disabled"} />
     )

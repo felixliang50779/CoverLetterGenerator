@@ -17,7 +17,7 @@
     ]
   },
   "content-script/src/main.jsx": {
-    "file": "assets/main.jsx-yc-qj08G.js",
+    "file": "assets/main.jsx-CA5Zvv31.js",
     "name": "main.jsx",
     "src": "content-script/src/main.jsx",
     "isEntry": true,
@@ -38,7 +38,7 @@
     ]
   },
   "main.jsx-loader.js": {
-    "file": "assets/main.jsx-loader-BxCloGOc.js",
+    "file": "assets/main.jsx-loader-CccYhvo5.js",
     "src": "main.jsx-loader.js"
   },
   "src/scripts/background.js": {

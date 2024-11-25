@@ -1,3 +1,4 @@
+// Enable session storage access for content script
 chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
 
 // Extension shortcuts listener

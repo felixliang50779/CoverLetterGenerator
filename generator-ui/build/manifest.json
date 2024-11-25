@@ -24,7 +24,7 @@
   "content_scripts": [
     {
       "js": [
-        "assets/main.jsx-loader-BxCloGOc.js"
+        "assets/main.jsx-loader-CccYhvo5.js"
       ],
       "matches": [
         "<all_urls>"
@@ -62,7 +62,7 @@
       ],
       "resources": [
         "assets/FloatInput-64by_1X_.js",
-        "assets/main.jsx-yc-qj08G.js"
+        "assets/main.jsx-CA5Zvv31.js"
       ],
       "use_dynamic_url": false
     }
