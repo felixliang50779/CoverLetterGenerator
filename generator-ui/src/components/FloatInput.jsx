@@ -1,11 +1,18 @@
+// External Modules
 import { useState } from "react";
 import { Input } from "antd";
 
+// Styling
 import "./FloatInput.css";
 
+
 const FloatInput = (props) => {
+  const MAX_LABEL_LENGTH = 45;
+  
   const [focus, setFocus] = useState(false);
-  let { label, target, value, templateTargets, currentlySelected, type } = props;
+  let { target, value, templateTargets, currentlySelected, type } = props;
+
+  const label = target.length >= MAX_LABEL_LENGTH ? target.slice(0, MAX_LABEL_LENGTH) + "..." : target;
 
   const isOccupied = focus || (value && value.length > 0);
 

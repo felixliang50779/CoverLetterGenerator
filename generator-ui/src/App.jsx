@@ -1,8 +1,5 @@
 // External Modules
 import { useState, useEffect, useRef } from 'react';
-import { Card } from "antd";
-import { SelectOutlined } from "@ant-design/icons";
-import debounce from "debounce";
 
 // Internal Modules
 import { initializeTemplating } from './scripts/helper';
@@ -73,7 +70,6 @@ export default function App() {
           <div className="secondary-container">
             <TemplateItems
               templateTargets={templateTargets}
-              setTemplateTargets={setTemplateTargets}
               currentlySelected={currentlySelected}
             />
             <span className='vertical-spacer' />

@@ -1,46 +1,67 @@
 {
-    "manifest_version": 3,
-    "name": "Cover Letter Generator",
-    "icons": {
-      "16": "icon16.png",
-      "32": "icon32.png",
-      "48": "icon48.png",
-      "128": "icon128.png"
-    },
-    "version": "1.0.1",
-    "action": {
-      "default_popup": "index.html"
-    },
-    "permissions": ["activeTab", "scripting", "notifications", "storage"],
-    "background": {
-      "service_worker": "background.js",
+  "manifest_version": 3,
+  "name": "Cover Letter Generator",
+  "icons": {
+    "16": "icon16.png",
+    "32": "icon32.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "version": "1.0.1",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "notifications",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "service-worker-loader.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "assets/index.jsx-loader-BN9BurR6.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ],
       "type": "module"
-    },
-    "content_scripts": [
-      {
-        "matches": ["<all_urls>"],
-        "js": ["content.js"],
-        "type": "module"
-      }
-    ],
-    "commands": {
-      "get-selected-text": {
-        "suggested-key": {
-          "default": "Alt+W"
-        },
-        "description": "Assign from the selected text"
-      },
-      "toggle-previous-select": {
-        "suggested-key": {
-          "default": "Alt+Q"
-        },
-        "description": "Switch to the previous target"
-      },
-      "toggle-next-select": {
-        "suggested-key": {
-          "default": "Alt+E"
-        },
-        "description": "Switch to the next target"
-      }
     }
+  ],
+  "commands": {
+    "get-selected-text": {
+      "suggested-key": {
+        "default": "Alt+W"
+      },
+      "description": "Assign from the selected text"
+    },
+    "toggle-previous-select": {
+      "suggested-key": {
+        "default": "Alt+Q"
+      },
+      "description": "Switch to the previous target"
+    },
+    "toggle-next-select": {
+      "suggested-key": {
+        "default": "Alt+E"
+      },
+      "description": "Switch to the next target"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "resources": [
+        "assets/jsx-runtime-BmFbl-DQ.js",
+        "assets/index.jsx-OwQLsiUB.js"
+      ],
+      "use_dynamic_url": false
+    }
+  ]
 }
