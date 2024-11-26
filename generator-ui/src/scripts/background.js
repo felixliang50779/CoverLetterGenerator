@@ -1,6 +1,9 @@
 // Enable session storage access for content script
 chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
 
+// Inject content script into all open tabs on extension install
+chrome.runtime.onInstalled.addListener(onInstallHandler);
+
 // Extension shortcuts listener
 chrome.commands.onCommand.addListener(async function (command) {
     if (command === "get-selected-text") {
@@ -12,21 +15,7 @@ chrome.commands.onCommand.addListener(async function (command) {
             if (result.templateTargets) {
                 const currentlySelected = result.currentlySelected;
                 result.templateTargets[currentlySelected] = text;
-                chrome.storage.session.set({ templateTargets: result.templateTargets }, () => {
-                    chrome.storage.session.get(["templateTargets"], result => {
-                        Object.values(result.templateTargets).every(value => value !== "") ?
-                            displayNotification(
-                                "Ready to Generate!",
-                                `Set value "${text}" for target ${currentlySelected}`,
-                                "success-icon.png"
-                            )
-                            :
-                            displayNotification(
-                                "Success!", `Set value "${text}" for target ${currentlySelected}`,
-                                "success-icon.png"
-                            );
-                    });
-                });
+                chrome.storage.session.set({ templateTargets: result.templateTargets });
             }
         });
     }
@@ -44,11 +33,7 @@ chrome.commands.onCommand.addListener(async function (command) {
                     newTarget = targetIndex === targetArray.length - 1 ? targetArray.at(0) : targetArray.at(targetIndex + 1);
                 }
         
-                chrome.storage.session.set({ currentlySelected: newTarget }, () => {
-                    displayNotification("Attention", 
-                        `Now selecting for ${newTarget}: ${result.templateTargets[newTarget]}`, 
-                            "alert-icon.png");
-                });
+                chrome.storage.session.set({ currentlySelected: newTarget });
             }
         });
     }
@@ -56,18 +41,16 @@ chrome.commands.onCommand.addListener(async function (command) {
 
 /////////////////// HELPER FUNCTIONS ///////////////////
 
-async function displayNotification(title, message, icon) {
-    const notification = await chrome.notifications.create(
-        {
-            type: "basic",
-            iconUrl: icon,
-            title: title,
-            message: message,
-            silent: true
-        }
-    )
+function onInstallHandler(details) {
+    chrome.tabs.query({}, tabs => {
+        tabs.forEach(tab => {
+          if (!tab.url.startsWith("chrome://")) {
+            chrome.tabs.reload(tab.id);
+          }
+        });
 
-    setTimeout(() => chrome.notifications.clear(notification), 1250);
+        chrome.runtime.onInstalled.removeListener();
+    });
 }
 
 //The following code to get the selection is from an answer to "Get the

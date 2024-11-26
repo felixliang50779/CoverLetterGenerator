@@ -29,6 +29,7 @@ const FloatInput = (props) => {
       onBlur={() => setFocus(false)}
       onFocus={() => setFocus(true)}
     >
+      <div>drag me</div>
       <Input
         className={currentlySelected === target && "selected"}
         size="large"

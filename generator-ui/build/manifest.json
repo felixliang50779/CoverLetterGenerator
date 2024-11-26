@@ -15,7 +15,8 @@
     "activeTab",
     "scripting",
     "notifications",
-    "storage"
+    "storage",
+    "tabs"
   ],
   "background": {
     "service_worker": "service-worker-loader.js",
@@ -24,7 +25,7 @@
   "content_scripts": [
     {
       "js": [
-        "assets/main.jsx-loader-CccYhvo5.js"
+        "assets/main.jsx-loader-CCI2HdC5.js"
       ],
       "matches": [
         "<all_urls>"
@@ -61,8 +62,8 @@
         "<all_urls>"
       ],
       "resources": [
-        "assets/FloatInput-64by_1X_.js",
-        "assets/main.jsx-CA5Zvv31.js"
+        "assets/FloatInput-BnyRXgaX.js",
+        "assets/main.jsx-BgQl2n0q.js"
       ],
       "use_dynamic_url": false
     }

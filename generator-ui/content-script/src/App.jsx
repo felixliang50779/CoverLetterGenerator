@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
+import Draggable from "react-draggable";
 import FloatInput from "../../src/components/FloatInput";
 
-export default function App() {
+function App() {
     const [tooltipCoords, setTooltipCoords] = useState({});
-    const [isCollapsed, setIsCollapsed] = useState(false);
     const [templateTargets, setTemplateTargets] = useState({});
     const [currentlySelected, setCurrentlySelected] = useState("");
 
@@ -47,12 +47,25 @@ export default function App() {
     }, []);
 
     return (
-        // this is eventually going to be wrapped with <Draggable />
-        // and <Draggable /> will be wrapped with something like <Collapsible /> 
-        <FloatInput
-            target={currentlySelected}
-            value={templateTargets[currentlySelected]}
-            templateTargets={templateTargets}
-            currentlySelected={"disabled"} />
-    )
+        Object.keys(templateTargets).length
+        ?
+        <Draggable
+            position={{ x: tooltipCoords.x, y: tooltipCoords.y }}
+            cancel={"input"}
+            onDrag={(e, data) => {
+                chrome.storage.local.set({ tooltipCoords: { x: data.x, y: data.y } });
+            }}>
+                <div>
+                    <FloatInput
+                        target={currentlySelected}
+                        value={templateTargets[currentlySelected]}
+                        templateTargets={templateTargets}
+                        currentlySelected={"disabled"} />
+                </div>
+        </Draggable>
+        :
+        <></>
+    );
 }
+
+export default memo(App);
