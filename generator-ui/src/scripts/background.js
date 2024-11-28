@@ -1,8 +1,10 @@
 // Enable session storage access for content script
 chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
 
-// Inject content script into all open tabs on extension install or update
+// Inject content script into all tabs on extension install or update
 chrome.runtime.onInstalled.addListener(onInstallHandler);
+
+chrome.runtime.setUninstallURL("https://us-central1-cover-letter-generator-439117.cloudfunctions.net/tooltip-cleanup");
 
 // Extension shortcuts listener
 chrome.commands.onCommand.addListener(async function (command) {
@@ -53,6 +55,16 @@ function onInstallHandler(details) {
                 target: { tabId: tab.id },
                 files: [chrome.runtime.getManifest().content_scripts[0].css[0]]
             });
+          }
+        });
+    });
+}
+
+function reloadTabs() {
+    chrome.tabs.query({}, tabs => {
+        tabs.forEach(tab => {
+          if (!tab.url.startsWith("chrome://")) {
+            chrome.tabs.reload(tab.id);
           }
         });
     });

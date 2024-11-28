@@ -2,13 +2,11 @@ import { useEffect, useState } from "react";
 import Draggable from "react-draggable";
 import FloatInput from "../../src/components/FloatInput";
 
-function App() {
+
+export default function App() {
     const [tooltipCoords, setTooltipCoords] = useState({});
     const [templateTargets, setTemplateTargets] = useState({});
     const [currentlySelected, setCurrentlySelected] = useState("");
-
-    // LOGGING
-    console.log("content script has been injected!");
 
     // when content script is first loaded
     useEffect(() => {
@@ -33,14 +31,22 @@ function App() {
         });
         chrome.storage.session.onChanged.addListener((changes, namespace) => {
             if ("templateTargets" in changes) {
-              changes.templateTargets.newValue !== undefined ? setTemplateTargets(changes.templateTargets.newValue) :
+              if (changes.templateTargets.newValue !== undefined) {
+                setTemplateTargets(changes.templateTargets.newValue);
+              }
+              else {
                 setTemplateTargets({});
+                const orphaned_element = document.getElementById("floating-tooltip");
+                if (orphaned_element) {
+                    orphaned_element.remove();
+                }
+              }
             }
             if ("currentlySelected" in changes) {
               changes.currentlySelected.newValue !== undefined ? setCurrentlySelected(changes.currentlySelected.newValue) :
                 setCurrentlySelected("");
             }
-          });
+        });
     }, []);
 
     return (
@@ -64,5 +70,3 @@ function App() {
         <></>
     );
 }
-
-export default App;

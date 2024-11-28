@@ -13,7 +13,6 @@
   },
   "permissions": [
     "scripting",
-    "notifications",
     "storage",
     "tabs"
   ],
@@ -27,7 +26,7 @@
   "content_scripts": [
     {
       "js": [
-        "assets/main.jsx-loader-BuYXR3MF.js"
+        "assets/main.jsx-loader-89WhOz8t.js"
       ],
       "matches": [
         "<all_urls>"
@@ -65,7 +64,7 @@
       ],
       "resources": [
         "assets/FloatInput-BnyRXgaX.js",
-        "assets/main.jsx-CpkBl7bH.js"
+        "assets/main.jsx-Moz9bxBH.js"
       ],
       "use_dynamic_url": false
     }
