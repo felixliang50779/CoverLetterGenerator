@@ -1,7 +1,7 @@
 // Enable session storage access for content script
 chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
 
-// Inject content script into all open tabs on extension install
+// Inject content script into all open tabs on extension install or update
 chrome.runtime.onInstalled.addListener(onInstallHandler);
 
 // Extension shortcuts listener
@@ -45,11 +45,16 @@ function onInstallHandler(details) {
     chrome.tabs.query({}, tabs => {
         tabs.forEach(tab => {
           if (!tab.url.startsWith("chrome://")) {
-            chrome.tabs.reload(tab.id);
+            chrome.scripting.executeScript({
+                target: { tabId: tab.id },
+                files: [chrome.runtime.getManifest().content_scripts[0].js[0]]
+            });
+            chrome.scripting.insertCSS({
+                target: { tabId: tab.id },
+                files: [chrome.runtime.getManifest().content_scripts[0].css[0]]
+            });
           }
         });
-
-        chrome.runtime.onInstalled.removeListener();
     });
 }
 
@@ -63,17 +68,19 @@ function getSelectionText() {
     var text = "";
     var activeEl = document.activeElement;
     var activeElTagName = activeEl ? activeEl.tagName.toLowerCase() : null;
+
     if (
         (activeElTagName == "textarea") || (activeElTagName == "input" &&
         /^(?:text|search|password|tel|url)$/i.test(activeEl.type)) &&
         (typeof activeEl.selectionStart == "number")
-    ) {
+    )
+    {
         text = activeEl.value.slice(activeEl.selectionStart, activeEl.selectionEnd);
-    } else if (window.getSelection) {
+    }
+    else if (window.getSelection) {
         text = window.getSelection().toString().trim();
     }
 
-    window.console.log(text);
     return text;
 }
 

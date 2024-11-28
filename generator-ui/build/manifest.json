@@ -12,11 +12,13 @@
     "default_popup": "index.html"
   },
   "permissions": [
-    "activeTab",
     "scripting",
     "notifications",
     "storage",
     "tabs"
+  ],
+  "host_permissions": [
+    "*://*/*"
   ],
   "background": {
     "service_worker": "service-worker-loader.js",
@@ -25,7 +27,7 @@
   "content_scripts": [
     {
       "js": [
-        "assets/main.jsx-loader-CCI2HdC5.js"
+        "assets/main.jsx-loader-BuYXR3MF.js"
       ],
       "matches": [
         "<all_urls>"
@@ -63,7 +65,7 @@
       ],
       "resources": [
         "assets/FloatInput-BnyRXgaX.js",
-        "assets/main.jsx-BgQl2n0q.js"
+        "assets/main.jsx-CpkBl7bH.js"
       ],
       "use_dynamic_url": false
     }

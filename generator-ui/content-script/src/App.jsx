@@ -1,4 +1,4 @@
-import { useEffect, useState, memo } from "react";
+import { useEffect, useState } from "react";
 import Draggable from "react-draggable";
 import FloatInput from "../../src/components/FloatInput";
 
@@ -30,9 +30,6 @@ function App() {
            if ("tooltipCoords" in changes) {
             changes.tooltipCoords.newValue !== undefined && setTooltipCoords(changes.tooltipCoords.newValue);
            }
-           if ("isCollapsed" in changes) {
-            changes.isCollapsed.newValue !== undefined && setIsCollapsed(changes.isCollapsed.newValue);
-           } 
         });
         chrome.storage.session.onChanged.addListener((changes, namespace) => {
             if ("templateTargets" in changes) {
@@ -50,9 +47,9 @@ function App() {
         Object.keys(templateTargets).length
         ?
         <Draggable
-            position={{ x: tooltipCoords.x, y: tooltipCoords.y }}
+            defaultPosition={tooltipCoords}
             cancel={"input"}
-            onDrag={(e, data) => {
+            onStop={(e, data) => {
                 chrome.storage.local.set({ tooltipCoords: { x: data.x, y: data.y } });
             }}>
                 <div>
@@ -68,4 +65,4 @@ function App() {
     );
 }
 
-export default memo(App);
+export default App;
