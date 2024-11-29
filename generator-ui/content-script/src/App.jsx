@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Draggable from "react-draggable";
 import FloatInput from "../../src/components/FloatInput";
 
-
 export default function App() {
     const [tooltipCoords, setTooltipCoords] = useState({});
     const [templateTargets, setTemplateTargets] = useState({});
@@ -31,16 +30,8 @@ export default function App() {
         });
         chrome.storage.session.onChanged.addListener((changes, namespace) => {
             if ("templateTargets" in changes) {
-              if (changes.templateTargets.newValue !== undefined) {
-                setTemplateTargets(changes.templateTargets.newValue);
-              }
-              else {
+              changes.templateTargets.newValue !== undefined ? setTemplateTargets(changes.templateTargets.newValue) :
                 setTemplateTargets({});
-                const orphaned_element = document.getElementById("floating-tooltip");
-                if (orphaned_element) {
-                    orphaned_element.remove();
-                }
-              }
             }
             if ("currentlySelected" in changes) {
               changes.currentlySelected.newValue !== undefined ? setCurrentlySelected(changes.currentlySelected.newValue) :
