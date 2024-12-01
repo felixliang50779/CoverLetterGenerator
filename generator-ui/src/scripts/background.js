@@ -60,16 +60,6 @@ function onInstallHandler(details) {
     });
 }
 
-function reloadTabs() {
-    chrome.tabs.query({}, tabs => {
-        tabs.forEach(tab => {
-          if (!tab.url.startsWith("chrome://")) {
-            chrome.tabs.reload(tab.id);
-          }
-        });
-    });
-}
-
 //The following code to get the selection is from an answer to "Get the
 //  Highlighted/Selected text" on Stack Overflow, available at:
 //  https://stackoverflow.com/a/5379408

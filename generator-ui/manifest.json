@@ -21,7 +21,8 @@
       {
         "matches": ["<all_urls>"],
         "js": ["content-script/src/main.jsx"],
-        "type": "module"
+        "type": "module",
+        "run_at": "document_end"
       }
     ],
     "commands": {

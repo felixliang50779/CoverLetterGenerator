@@ -3,6 +3,8 @@ import Draggable from "react-draggable";
 import FloatInput from "../../src/components/FloatInput";
 
 export default function App() {
+    const INITIAL_POSITION = { x: 100.65, y: 200.4 };
+
     const [tooltipCoords, setTooltipCoords] = useState({});
     const [templateTargets, setTemplateTargets] = useState({});
     const [currentlySelected, setCurrentlySelected] = useState("");
@@ -13,7 +15,7 @@ export default function App() {
         // and currentlySelected from storage into state vars
         chrome.storage.local.get(["tooltipCoords", "isCollapsed"], result => {
             result.tooltipCoords !== undefined ? setTooltipCoords(result.tooltipCoords) : 
-                setTooltipCoords({ x: 100.65, y: 200.4 });
+                setTooltipCoords(INITIAL_POSITION);
             result.isCollapsed !== undefined && setIsCollapsed(result.isCollapsed);
         });
         chrome.storage.session.get(["templateTargets", "currentlySelected"], result => {
@@ -25,7 +27,8 @@ export default function App() {
         // add listeners for storage changes to all of the above to propagate state
         chrome.storage.local.onChanged.addListener((changes, namespace) => {
            if ("tooltipCoords" in changes) {
-            changes.tooltipCoords.newValue !== undefined && setTooltipCoords(changes.tooltipCoords.newValue);
+            changes.tooltipCoords.newValue !== undefined ? setTooltipCoords(changes.tooltipCoords.newValue) :
+                setTooltipCoords(INITIAL_POSITION);
            }
         });
         chrome.storage.session.onChanged.addListener((changes, namespace) => {
@@ -46,9 +49,7 @@ export default function App() {
         <Draggable
             defaultPosition={tooltipCoords}
             cancel={"input"}
-            onStop={(e, data) => {
-                chrome.storage.local.set({ tooltipCoords: { x: data.x, y: data.y } });
-            }}>
+            onStop={(e, data) => chrome.storage.local.set({ tooltipCoords: { x: data.x, y: data.y } }) }>
                 <div>
                     <FloatInput
                         target={currentlySelected}
