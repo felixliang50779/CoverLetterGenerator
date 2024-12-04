@@ -21,6 +21,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-draggable": "^4.4.6",
+    "react-resizable": "^3.0.5",
+    "vite-plugin-manifest": "^0.0.1",
     "vm": "^0.1.0"
   },
   "devDependencies": {

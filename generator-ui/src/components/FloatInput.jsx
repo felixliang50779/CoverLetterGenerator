@@ -10,7 +10,7 @@ const FloatInput = (props) => {
   const MAX_LABEL_LENGTH = 45;
   
   const [focus, setFocus] = useState(false);
-  let { target, value, templateTargets, currentlySelected, type } = props;
+  let { target, value, templateTargets, currentlySelected, type, isTooltip } = props;
 
   const label = target.length >= MAX_LABEL_LENGTH ? target.slice(0, MAX_LABEL_LENGTH) + "..." : target;
 
@@ -25,11 +25,11 @@ const FloatInput = (props) => {
 
   return (
     <div
-      className='float-label'
+      className={'float-label'}
       onBlur={() => setFocus(false)}
       onFocus={() => setFocus(true)}
     >
-      <div>drag me</div>
+      <div className={!isTooltip && "hidden"}>drag me</div>
       <Input
         className={currentlySelected === target && "selected"}
         size="large"

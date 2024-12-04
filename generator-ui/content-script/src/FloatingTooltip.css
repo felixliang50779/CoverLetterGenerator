@@ -1,0 +1,5 @@
+#floating-tooltip {
+    position: fixed;
+    z-index: 9999;
+    height: 200%;
+}

@@ -55,6 +55,7 @@ export default function App() {
                         target={currentlySelected}
                         value={templateTargets[currentlySelected]}
                         templateTargets={templateTargets}
+                        isTooltip={true}
                         currentlySelected={"disabled"} />
                 </div>
         </Draggable>

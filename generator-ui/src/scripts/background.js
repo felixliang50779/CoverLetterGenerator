@@ -43,17 +43,24 @@ chrome.commands.onCommand.addListener(async function (command) {
 
 /////////////////// HELPER FUNCTIONS ///////////////////
 
+// auto-inject content script on extension install or update
 function onInstallHandler(details) {
     chrome.tabs.query({}, tabs => {
         tabs.forEach(tab => {
           if (!tab.url.startsWith("chrome://")) {
+            // remove injected stylesheet if it already exists
+            chrome.scripting.removeCSS({
+                target: { tabId: tab.id },
+                files: [chrome.runtime.getManifest().content_scripts[0].css[1]]
+            });
+
             chrome.scripting.executeScript({
                 target: { tabId: tab.id },
                 files: [chrome.runtime.getManifest().content_scripts[0].js[0]]
             });
             chrome.scripting.insertCSS({
                 target: { tabId: tab.id },
-                files: [chrome.runtime.getManifest().content_scripts[0].css[0]]
+                files: [chrome.runtime.getManifest().content_scripts[0].css[1]]
             });
           }
         });

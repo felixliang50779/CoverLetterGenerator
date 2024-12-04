@@ -19,6 +19,7 @@ const TemplateItems = ({ templateTargets, currentlySelected }) => {
                 value={value}
                 templateTargets={templateTargets}
                 currentlySelected={currentlySelected}
+                isTooltip={false}
                 type="text" />
               <button
                 className="button toggle-button"
