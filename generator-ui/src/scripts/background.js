@@ -1,8 +1,13 @@
 // Enable session storage access for content script
 chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
 
-// Inject content script into all tabs on extension install or update
+// Inject content script into all tabs on extension update
 chrome.runtime.onInstalled.addListener(onInstallHandler);
+
+// Listen for requests from popup to inject content script
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    message === "injectContentScript" && injectContentScript();
+});
 
 chrome.runtime.setUninstallURL("https://us-central1-cover-letter-generator-439117.cloudfunctions.net/tooltip-cleanup");
 
@@ -43,13 +48,24 @@ chrome.commands.onCommand.addListener(async function (command) {
 
 /////////////////// HELPER FUNCTIONS ///////////////////
 
-// auto-inject content script on extension install or update
+// auto-inject content script on extension update
 function onInstallHandler(details) {
+    if (details.reason !== "install") {
+        injectContentScript();
+    }
+}
+
+function injectContentScript() {
     chrome.tabs.query({}, tabs => {
-        tabs.forEach(tab => {
+        tabs.forEach(async (tab) => {
           if (!tab.url.startsWith("chrome://")) {
             // remove injected stylesheet if it already exists
-            chrome.scripting.removeCSS({
+            await chrome.scripting.removeCSS({
+                target: { tabId: tab.id },
+                files: [chrome.runtime.getManifest().content_scripts[0].css[1]]
+            });
+            
+            chrome.scripting.insertCSS({
                 target: { tabId: tab.id },
                 files: [chrome.runtime.getManifest().content_scripts[0].css[1]]
             });
@@ -57,10 +73,6 @@ function onInstallHandler(details) {
             chrome.scripting.executeScript({
                 target: { tabId: tab.id },
                 files: [chrome.runtime.getManifest().content_scripts[0].js[0]]
-            });
-            chrome.scripting.insertCSS({
-                target: { tabId: tab.id },
-                files: [chrome.runtime.getManifest().content_scripts[0].css[1]]
             });
           }
         });

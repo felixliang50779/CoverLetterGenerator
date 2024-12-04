@@ -64,7 +64,10 @@ export default function App() {
           <button
             className={currentFile.name === PLACEHOLDER_FILE.name ?
               'hidden button confirm-button' : 'button confirm-button'}
-            onClick={() => initializeTemplating(currentFile, FILE_READER, setInvalidState)}>
+            onClick={async () => {
+              await initializeTemplating(currentFile, FILE_READER, setInvalidState);
+              chrome.runtime.sendMessage("injectContentScript");
+            }}>
               Parse
           </button> :
           <div className="secondary-container">
