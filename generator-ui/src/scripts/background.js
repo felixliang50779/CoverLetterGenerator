@@ -1,5 +1,15 @@
+///////////////////  CONFIGURATION  ///////////////////
+
+
 // Enable session storage access for content script
 chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
+
+// Direct user to restart browser for cleanup of any injected elements 
+chrome.runtime.setUninstallURL("https://us-central1-cover-letter-generator-439117.cloudfunctions.net/tooltip-cleanup");
+
+
+/////////////////// LISTENERS ///////////////////
+
 
 // Inject content script into all tabs on extension update
 chrome.runtime.onInstalled.addListener(onInstallHandler);
@@ -8,8 +18,6 @@ chrome.runtime.onInstalled.addListener(onInstallHandler);
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     message === "injectContentScript" && injectContentScript();
 });
-
-chrome.runtime.setUninstallURL("https://us-central1-cover-letter-generator-439117.cloudfunctions.net/tooltip-cleanup");
 
 // Extension shortcuts listener
 chrome.commands.onCommand.addListener(async function (command) {
@@ -37,7 +45,8 @@ chrome.commands.onCommand.addListener(async function (command) {
                     newTarget = targetIndex === 0 ? targetArray.at(-1) : targetArray.at(targetIndex - 1);
                 }
                 else if (command === "toggle-next-select") {
-                    newTarget = targetIndex === targetArray.length - 1 ? targetArray.at(0) : targetArray.at(targetIndex + 1);
+                    newTarget = targetIndex === targetArray.length - 1 ? targetArray.at(0) : 
+                        targetArray.at(targetIndex + 1);
                 }
         
                 chrome.storage.session.set({ currentlySelected: newTarget });
@@ -50,10 +59,8 @@ chrome.commands.onCommand.addListener(async function (command) {
 
 // auto-inject content script on extension update
 function onInstallHandler(details) {
-    if (details.reason !== "install") {
-        injectContentScript();
-    }
-}
+    details.reason !== "install" && injectContentScript()
+};
 
 function injectContentScript() {
     chrome.tabs.query({}, tabs => {

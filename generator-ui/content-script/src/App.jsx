@@ -48,6 +48,7 @@ export default function App() {
         ?
         <Draggable
             defaultPosition={tooltipCoords}
+            bounds="html"
             cancel={"input"}
             onStop={(e, data) => chrome.storage.local.set({ tooltipCoords: { x: data.x, y: data.y } }) }>
                 <div>
