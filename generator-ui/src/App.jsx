@@ -1,5 +1,6 @@
 // External Modules
 import { useState, useEffect, useRef } from 'react';
+import { flushSync } from "react-dom";
 
 // Internal Modules
 import { initializeTemplating } from './scripts/helper';
@@ -36,8 +37,14 @@ export default function App() {
           setCurrentFile(PLACEHOLDER_FILE);
       }
       if ("templateTargets" in changes) {
-        changes.templateTargets.newValue !== undefined ? setTemplateTargets(changes.templateTargets.newValue) :
+        if (changes.templateTargets.newValue !== undefined) {
+          flushSync(() => {
+            setTemplateTargets(changes.templateTargets.newValue);
+          });
+        }
+        else {
           setTemplateTargets({});
+        }
       }
       if ("currentlySelected" in changes) {
         changes.currentlySelected.newValue !== undefined ? setCurrentlySelected(changes.currentlySelected.newValue) :
