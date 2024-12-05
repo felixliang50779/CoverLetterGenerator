@@ -13,7 +13,7 @@ export default function App() {
     // when content script is first loaded
     useEffect(() => {
         // load values for tooltip position, templatedItems, and currentlySelected from storage into state vars
-        chrome.storage.local.get(["tooltipCoords"], result => {
+        chrome.storage.session.get(["tooltipCoords"], result => {
             result.tooltipCoords !== undefined ? setTooltipCoords(result.tooltipCoords) : 
                 setTooltipCoords(INITIAL_POSITION);
         });
@@ -24,7 +24,7 @@ export default function App() {
         });
 
         // add listeners for storage changes to all of the above to propagate state
-        chrome.storage.local.onChanged.addListener((changes, namespace) => {
+        chrome.storage.session.onChanged.addListener((changes, namespace) => {
            if ("tooltipCoords" in changes) {
             changes.tooltipCoords.newValue !== undefined ? setTooltipCoords(changes.tooltipCoords.newValue) :
                 setTooltipCoords(INITIAL_POSITION);
@@ -49,7 +49,7 @@ export default function App() {
             defaultPosition={tooltipCoords}
             bounds="html"
             cancel={"input"}
-            onStop={(e, data) => chrome.storage.local.set({ tooltipCoords: { x: data.x, y: data.y } }) }>
+            onStop={(e, data) => chrome.storage.session.set({ tooltipCoords: { x: data.x, y: data.y } }) }>
                 <div>
                     <FloatInput
                         target={currentlySelected}
