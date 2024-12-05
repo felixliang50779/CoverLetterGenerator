@@ -37,14 +37,8 @@ export default function App() {
           setCurrentFile(PLACEHOLDER_FILE);
       }
       if ("templateTargets" in changes) {
-        if (changes.templateTargets.newValue !== undefined) {
-          flushSync(() => {
-            setTemplateTargets(changes.templateTargets.newValue);
-          });
-        }
-        else {
-          setTemplateTargets({});
-        }
+        changes.templateTargets.newValue !== undefined ? 
+          flushSync(() => setTemplateTargets(changes.templateTargets.newValue)) : setTemplateTargets({});
       }
       if ("currentlySelected" in changes) {
         changes.currentlySelected.newValue !== undefined ? setCurrentlySelected(changes.currentlySelected.newValue) :

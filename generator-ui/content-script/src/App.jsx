@@ -32,14 +32,8 @@ export default function App() {
         });
         chrome.storage.session.onChanged.addListener((changes, namespace) => {
             if ("templateTargets" in changes) {
-                if (changes.templateTargets.newValue !== undefined) {
-                    flushSync(() => {
-                        setTemplateTargets(changes.templateTargets.newValue);
-                    });
-                }
-                else {
-                    setTemplateTargets({});
-                }
+                changes.templateTargets.newValue !== undefined ? 
+                    flushSync(() => setTemplateTargets(changes.templateTargets.newValue)) : setTemplateTargets({});
             }
             if ("currentlySelected" in changes) {
               changes.currentlySelected.newValue !== undefined ? setCurrentlySelected(changes.currentlySelected.newValue) :

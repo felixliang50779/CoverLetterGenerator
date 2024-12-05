@@ -7,14 +7,11 @@ import "./FloatInput.css";
 
 
 const FloatInput = (props) => {
+  // Constants
   const MAX_LABEL_LENGTH = 45;
   
   // state vars and references
   const [focus, setFocus] = useState(false);
-  const position = useRef({
-    beforeStart: 0,
-    beforeEnd: 0
-  });
   const inputRef = useRef(null);
 
   const { target, value, templateTargets, currentlySelected, type, isTooltip } = props;
@@ -25,11 +22,6 @@ const FloatInput = (props) => {
   const handleInputChange = async (event, target) => {
     const beforeStart = event.target.selectionStart;
     const beforeEnd = event.target.selectionEnd;
-
-    position.current = {
-      beforeStart,
-      beforeEnd
-    };
 
     templateTargets[target] = event.target.value;
     chrome.storage.session.set({ templateTargets: templateTargets }, () => {
