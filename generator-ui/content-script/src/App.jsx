@@ -12,12 +12,10 @@ export default function App() {
 
     // when content script is first loaded
     useEffect(() => {
-        // load values for tooltip position, isCollapsed, templatedItems,
-        // and currentlySelected from storage into state vars
-        chrome.storage.local.get(["tooltipCoords", "isCollapsed"], result => {
+        // load values for tooltip position, templatedItems, and currentlySelected from storage into state vars
+        chrome.storage.local.get(["tooltipCoords"], result => {
             result.tooltipCoords !== undefined ? setTooltipCoords(result.tooltipCoords) : 
                 setTooltipCoords(INITIAL_POSITION);
-            result.isCollapsed !== undefined && setIsCollapsed(result.isCollapsed);
         });
         chrome.storage.session.get(["templateTargets", "currentlySelected"], result => {
             result.templateTargets !== undefined ? setTemplateTargets(result.templateTargets) : setTemplateTargets({});
