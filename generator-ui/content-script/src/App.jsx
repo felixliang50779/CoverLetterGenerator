@@ -10,6 +10,8 @@ export default function App() {
     const [templateTargets, setTemplateTargets] = useState({});
     const [currentlySelected, setCurrentlySelected] = useState("");
 
+    const [tooltipVisible, setTooltipVisible] = useState(true);
+
     // when content script is first loaded
     useEffect(() => {
         // load values for tooltip position, templatedItems, and currentlySelected from storage into state vars
@@ -36,10 +38,18 @@ export default function App() {
                     setTooltipCoords(INITIAL_POSITION);
             }
         });
+
+        chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+            if (message === "toggleTooltip") {
+                setTooltipVisible(prevState => {
+                    return !prevState;
+                });
+            }
+        });
     }, []);
 
     return (
-        Object.keys(templateTargets).length
+        Object.keys(templateTargets).length && tooltipVisible
         ?
         <Draggable
             defaultPosition={tooltipCoords}

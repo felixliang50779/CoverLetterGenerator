@@ -51,6 +51,7 @@ html, body, :root {
 }
 
 .ant-input {
+    font-weight: bold !important;
     background-color: #1a1a1a !important;
     color: #f8f8f2 !important;
     width: 20em !important;

@@ -43,6 +43,12 @@
           "default": "Alt+E"
         },
         "description": "Switch to the next target"
+      },
+      "toggle-tooltip-visible": {
+        "suggested-key": {
+          "default": "Alt+H"
+        },
+        "description": "Toggle tooltip visibility"
       }
     }
 }

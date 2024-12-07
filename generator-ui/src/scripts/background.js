@@ -50,6 +50,13 @@ chrome.commands.onCommand.addListener(async function (command) {
             }
         });
     }
+    else if (command === "toggle-tooltip-visible") {
+        chrome.tabs.query({}, tabs => {
+            tabs.forEach(async (tab) => {
+                chrome.tabs.sendMessage(tab.id, "toggleTooltip");
+            });
+        });
+    }
 });
 
 /////////////////// HELPER FUNCTIONS ///////////////////
