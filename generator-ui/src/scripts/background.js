@@ -51,10 +51,16 @@ chrome.commands.onCommand.addListener(async function (command) {
         });
     }
     else if (command === "toggle-tooltip-visible") {
-        chrome.tabs.query({}, tabs => {
-            tabs.forEach(async (tab) => {
-                chrome.tabs.sendMessage(tab.id, "toggleTooltip");
-            });
+        chrome.storage.session.get(["currentlySelected"], result => {
+            if (result.currentlySelected) {
+                chrome.tabs.query({}, tabs => {
+                    tabs.forEach(async (tab) => {
+                        if (!tab.url.startsWith("chrome://")) {
+                            chrome.tabs.sendMessage(tab.id, "toggleTooltip");
+                        }
+                    });
+                });
+            }
         });
     }
 });
