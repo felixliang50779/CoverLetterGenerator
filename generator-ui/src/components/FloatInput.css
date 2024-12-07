@@ -7,7 +7,7 @@
 }
 
 .label {
-    font-weight: normal !important;
+    font-weight: bold !important;
     position: absolute !important;
     pointer-events: none !important;
     left: 12px !important;

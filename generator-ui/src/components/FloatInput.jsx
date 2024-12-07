@@ -1,5 +1,6 @@
 // External Modules
 import { useState, useRef } from "react";
+import { MoreOutlined } from "@ant-design/icons";
 import { Input } from "antd";
 
 // Styling
@@ -41,19 +42,22 @@ const FloatInput = (props) => {
   };
 
   return (
-    <div
-      className={'float-label'}
-      onBlur={() => setFocus(false)}
-      onFocus={() => setFocus(true)}
-    >
-      <Input
-        ref={inputRef}
-        className={currentlySelected === target && "selected"}
-        size="large"
-        value={value}
-        onChange={event => handleInputChange(event, target)}
-        type={type}/>
-      <label className={labelClass}>{label}</label>
+    <div className={isTooltip && "tooltip-background"}>
+      <div
+        className={'float-label'}
+        onBlur={() => setFocus(false)}
+        onFocus={() => setFocus(true)}
+      >
+        <Input
+          ref={inputRef}
+          className={currentlySelected === target && "selected"}
+          size="large"
+          value={value}
+          onChange={event => handleInputChange(event, target)}
+          type={type}/>
+        <label className={labelClass}>{label}</label>
+      </div>
+      <MoreOutlined className={isTooltip ? "drag-handle" : "hidden"} />
     </div>
   );
 };
