@@ -1,15 +1,12 @@
 ///////////////////  CONFIGURATION  ///////////////////
 
-
 // Enable session storage access for content script
 chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' });
 
 // Direct user to restart browser for cleanup of any injected elements 
 chrome.runtime.setUninstallURL("https://us-central1-cover-letter-generator-439117.cloudfunctions.net/tooltip-cleanup");
 
-
 /////////////////// LISTENERS ///////////////////
-
 
 // Inject content script into all tabs on extension update
 chrome.runtime.onInstalled.addListener(onInstallHandler);

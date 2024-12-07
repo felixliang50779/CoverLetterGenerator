@@ -13,31 +13,27 @@ export default function App() {
     // when content script is first loaded
     useEffect(() => {
         // load values for tooltip position, templatedItems, and currentlySelected from storage into state vars
-        chrome.storage.session.get(["tooltipCoords"], result => {
-            result.tooltipCoords !== undefined ? setTooltipCoords(result.tooltipCoords) : 
-                setTooltipCoords(INITIAL_POSITION);
-        });
-        chrome.storage.session.get(["templateTargets", "currentlySelected"], result => {
+        chrome.storage.session.get(["templateTargets", "currentlySelected", "tooltipCoords"], result => {
             result.templateTargets !== undefined ? setTemplateTargets(result.templateTargets) : setTemplateTargets({});
             result.currentlySelected !== undefined ? setCurrentlySelected(result.currentlySelected) : 
                 setCurrentlySelected("");
+            result.tooltipCoords !== undefined ? setTooltipCoords(result.tooltipCoords) : 
+                setTooltipCoords(INITIAL_POSITION);
         });
 
         // add listeners for storage changes to all of the above to propagate state
-        chrome.storage.session.onChanged.addListener((changes, namespace) => {
-           if ("tooltipCoords" in changes) {
-            changes.tooltipCoords.newValue !== undefined ? setTooltipCoords(changes.tooltipCoords.newValue) :
-                setTooltipCoords(INITIAL_POSITION);
-           }
-        });
         chrome.storage.session.onChanged.addListener((changes, namespace) => {
             if ("templateTargets" in changes) {
                 changes.templateTargets.newValue !== undefined ? 
                     flushSync(() => setTemplateTargets(changes.templateTargets.newValue)) : setTemplateTargets({});
             }
             if ("currentlySelected" in changes) {
-              changes.currentlySelected.newValue !== undefined ? setCurrentlySelected(changes.currentlySelected.newValue) :
-                setCurrentlySelected("");
+                changes.currentlySelected.newValue !== undefined ? setCurrentlySelected(changes.currentlySelected.newValue) :
+                    setCurrentlySelected("");
+            }
+            if ("tooltipCoords" in changes) {
+                changes.tooltipCoords.newValue !== undefined ? setTooltipCoords(changes.tooltipCoords.newValue) :
+                    setTooltipCoords(INITIAL_POSITION);
             }
         });
     }, []);
@@ -56,7 +52,7 @@ export default function App() {
                         value={templateTargets[currentlySelected]}
                         templateTargets={templateTargets}
                         isTooltip={true}
-                        currentlySelected={"disabled"} />
+                        currentlySelected={currentlySelected} />
                 </div>
         </Draggable>
         :

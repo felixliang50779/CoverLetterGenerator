@@ -1,17 +1,21 @@
+html, body, :root {
+    all: unset;
+}
+
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .float-label {
-    position: relative;
+    position: relative !important;
 }
 
 .label {
-    font-weight: normal !important;
+    font: bold 15px "Inter", sans-serif !important;
     position: absolute !important;
     pointer-events: none !important;
     left: 12px !important;
-    top: 8px !important;
+    top: 7.5px !important;
     transition: 0.2s ease all !important;
 }
 
@@ -31,7 +35,10 @@
 .ant-input {
     background-color: #1a1a1a !important;
     color: #f8f8f2 !important;
-    width: 20em;
+    width: 20em !important;
+    height: 2em !important;
+    border-radius: 0.5em !important;
+    padding-left: 0.6em !important;
 }
 
 .ant-input-outlined:hover, .ant-input-outlined:focus {
