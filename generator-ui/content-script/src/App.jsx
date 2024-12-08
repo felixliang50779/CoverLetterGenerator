@@ -52,7 +52,8 @@ export default function App() {
         chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             if (message === "toggleTooltip") {
                 chrome.storage.session.get(["tooltipVisible"], result => {
-                    chrome.storage.session.set({ tooltipVisible: !result.tooltipVisible });
+                    result.tooltipVisible === undefined ? chrome.storage.session.set({ tooltipVisible: false }) :
+                        chrome.storage.session.set({ tooltipVisible: !result.tooltipVisible });
                 });
             }
         });
