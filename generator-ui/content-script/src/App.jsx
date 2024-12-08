@@ -6,7 +6,7 @@ import FloatInput from "../../src/components/FloatInput";
 export default function App() {
     const INITIAL_POSITION = { x: 100.65, y: 200.4 };
 
-    const [tooltipCoords, setTooltipCoords] = useState({});
+    const [tooltipCoords, setTooltipCoords] = useState(INITIAL_POSITION);
     const [templateTargets, setTemplateTargets] = useState({});
     const [currentlySelected, setCurrentlySelected] = useState("");
 
