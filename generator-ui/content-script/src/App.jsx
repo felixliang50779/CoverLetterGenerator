@@ -19,10 +19,12 @@ export default function App() {
             result.tooltipCoords !== undefined ? setTooltipCoords(result.tooltipCoords) : 
                 setTooltipCoords(INITIAL_POSITION);
         });
-        chrome.storage.session.get(["templateTargets", "currentlySelected"], result => {
+        chrome.storage.session.get(["templateTargets", "currentlySelected", "tooltipVisible"], result => {
             result.templateTargets !== undefined ? setTemplateTargets(result.templateTargets) : setTemplateTargets({});
             result.currentlySelected !== undefined ? setCurrentlySelected(result.currentlySelected) : 
                 setCurrentlySelected("");
+            result.tooltipVisible !== undefined ? setTooltipVisible(result.tooltipVisible) :
+                chrome.storage.session.set({ tooltipVisible: true });
         });
 
         // add listeners for storage changes to all of the above to propagate state
@@ -41,12 +43,16 @@ export default function App() {
                 changes.currentlySelected.newValue !== undefined ? setCurrentlySelected(changes.currentlySelected.newValue) :
                     setCurrentlySelected("");
             }
+            if ("tooltipVisible" in changes) {
+                changes.tooltipVisible.newValue !== undefined ? setTooltipVisible(changes.tooltipVisible.newValue) :
+                    setTooltipVisible(true);
+            }
         });
 
         chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             if (message === "toggleTooltip") {
-                setTooltipVisible(prevState => {
-                    return !prevState;
+                chrome.storage.session.get(["tooltipVisible"], result => {
+                    chrome.storage.session.set({ tooltipVisible: !result.tooltipVisible });
                 });
             }
         });

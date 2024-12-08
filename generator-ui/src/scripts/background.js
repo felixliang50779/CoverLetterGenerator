@@ -53,7 +53,7 @@ chrome.commands.onCommand.addListener(async function (command) {
     else if (command === "toggle-tooltip-visible") {
         chrome.storage.session.get(["currentlySelected"], result => {
             if (result.currentlySelected) {
-                chrome.tabs.query({}, tabs => {
+                chrome.tabs.query({ active: true, lastFocusedWindow: true }, tabs => {
                     tabs.forEach(async (tab) => {
                         if (!tab.url.startsWith("chrome://")) {
                             chrome.tabs.sendMessage(tab.id, "toggleTooltip");
