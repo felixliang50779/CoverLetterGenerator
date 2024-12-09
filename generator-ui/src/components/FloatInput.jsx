@@ -1,59 +1,63 @@
-import { useState } from "react";
+// External Modules
+import { useState, useRef } from "react";
+import { MoreOutlined } from "@ant-design/icons";
 import { Input } from "antd";
 
+// Styling
 import "./FloatInput.css";
 
 
-// import Modal from './Modal';
-
-const { TextArea } = Input;
-
 const FloatInput = (props) => {
+  // Constants
+  const MAX_LABEL_PLACEHOLDER_LENGTH = 20;
+  const MAX_LABEL_FLOATING_LENGTH = 30;
+  
+  // state vars and references
   const [focus, setFocus] = useState(false);
-  let { label, target, value, currentlySelected, type } = props;
+  const inputRef = useRef(null);
 
+  const { target, value, templateTargets, currentlySelected, type, isTooltip } = props;
   const isOccupied = focus || (value && value.length > 0);
-
   const labelClass = isOccupied ? "label as-label" : "label as-placeholder";
 
-    // // Modal State Variables
-    // const [isModalOpen, setModalOpen] = useState(false);
-    // const [modalMessage, setModalMessage] = useState('');
-  
-    //   // Modal Event Handler Function
-    //   const handleUpdate = () => {
-    //     // Perform some update logic
-    //     setModalMessage('State updated successfully!');
-    //     setModalOpen(true); // Open modal
-    //     console.log("ran modal function");
-    //   };
+  let label;
+  if (!isOccupied && target.length >= MAX_LABEL_PLACEHOLDER_LENGTH) {
+    label = target.slice(0, MAX_LABEL_PLACEHOLDER_LENGTH) + "...";
+  }
+  else if (isOccupied && target.length >= MAX_LABEL_FLOATING_LENGTH) {
+    label = target.slice(0, MAX_LABEL_FLOATING_LENGTH) + "...";
+  }
+  else {
+    label = target;
+  }
 
-  const handleInputChange = async (target, value) => {
-    chrome.storage.session.get(["templateTargets"], async (result) => {
-      result.templateTargets[target] = value;
-      chrome.storage.session.set({ templateTargets: result.templateTargets });
-    })
-    // handleUpdate();
+  const handleInputChange = async (event, target) => {
+    const beforeStart = event.target.selectionStart;
+    const beforeEnd = event.target.selectionEnd;
+
+    templateTargets[target] = event.target.value;
+    chrome.storage.session.set({ templateTargets: templateTargets }, () => {
+      inputRef.current.setSelectionRange(beforeStart, beforeEnd);
+    });
   };
 
   return (
-    <div
-      className='float-label'
-      onBlur={() => setFocus(false)}
-      onFocus={() => setFocus(true)}
-    >
-      <Input
-        className={currentlySelected === target && "selected"}
-        size="large"
-        value={value}
-        onChange={event => handleInputChange(target, event.target.value)}
-        type={type}/>
-      <label className={labelClass}>{label}</label>
-      {/* <Modal 
-        isOpen={isModalOpen} 
-        onClose={() => setModalOpen(false)} 
-        message={modalMessage} 
-      /> */}
+    <div className={isTooltip && "tooltip-background"}>
+      <div
+        className={'float-label'}
+        onBlur={() => setFocus(false)}
+        onFocus={() => setFocus(true)}
+      >
+        <Input
+          ref={inputRef}
+          className={currentlySelected === target && "selected"}
+          size="large"
+          value={value}
+          onChange={event => handleInputChange(event, target)}
+          type={type}/>
+        <label className={labelClass}>{label}</label>
+      </div>
+      <MoreOutlined className={isTooltip ? "drag-handle" : "hidden"} />
     </div>
   );
 };

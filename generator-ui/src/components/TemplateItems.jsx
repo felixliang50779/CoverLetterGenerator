@@ -7,11 +7,8 @@ import FloatInput from './FloatInput';
 import '../App.css';
 
 
-
 // TemplateItems Component
-const TemplateItems = ({ templateTargets, setTemplateTargets, currentlySelected }) => {
-    const MAX_LABEL_LENGTH = 45;
-    
+const TemplateItems = ({ templateTargets, currentlySelected }) => {
     return (
       <Card title="Templated Items">
         {
@@ -20,9 +17,9 @@ const TemplateItems = ({ templateTargets, setTemplateTargets, currentlySelected 
               <FloatInput
                 target={target}
                 value={value}
-                setTemplateTargets={setTemplateTargets}
+                templateTargets={templateTargets}
                 currentlySelected={currentlySelected}
-                label={target.length >= MAX_LABEL_LENGTH ? target.slice(0, MAX_LABEL_LENGTH) + "..." : target}
+                isTooltip={false}
                 type="text" />
               <button
                 className="button toggle-button"
