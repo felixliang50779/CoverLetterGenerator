@@ -75,7 +75,7 @@ function onInstallHandler(details) {
 function injectContentScript() {
     chrome.tabs.query({}, tabs => {
         tabs.forEach(async (tab) => {
-          if (!tab.url.startsWith("chrome://")) {
+          if (!tab.url.startsWith("chrome://") && (!tab.url.startsWith("https://chromewebstore.google.com/"))) {
             // remove injected stylesheet if it already exists
             await chrome.scripting.removeCSS({
                 target: { tabId: tab.id },
