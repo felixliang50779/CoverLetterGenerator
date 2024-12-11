@@ -1,8 +1,6 @@
 // External Modules
 import { useState, useEffect, useRef } from 'react';
-import { Card } from "antd";
-import { SelectOutlined } from "@ant-design/icons";
-import debounce from "debounce";
+import { flushSync } from "react-dom";
 
 // Internal Modules
 import { initializeTemplating } from './scripts/helper';
@@ -39,8 +37,8 @@ export default function App() {
           setCurrentFile(PLACEHOLDER_FILE);
       }
       if ("templateTargets" in changes) {
-        changes.templateTargets.newValue !== undefined ? setTemplateTargets(changes.templateTargets.newValue) :
-          setTemplateTargets({});
+        changes.templateTargets.newValue !== undefined ? 
+          flushSync(() => setTemplateTargets(changes.templateTargets.newValue)) : setTemplateTargets({});
       }
       if ("currentlySelected" in changes) {
         changes.currentlySelected.newValue !== undefined ? setCurrentlySelected(changes.currentlySelected.newValue) :
@@ -67,13 +65,15 @@ export default function App() {
           <button
             className={currentFile.name === PLACEHOLDER_FILE.name ?
               'hidden button confirm-button' : 'button confirm-button'}
-            onClick={() => initializeTemplating(currentFile, FILE_READER, setInvalidState)}>
+            onClick={async () => {
+              await initializeTemplating(currentFile, FILE_READER, setInvalidState);
+              chrome.runtime.sendMessage("injectContentScript");
+            }}>
               Parse
           </button> :
           <div className="secondary-container">
             <TemplateItems
               templateTargets={templateTargets}
-              setTemplateTargets={setTemplateTargets}
               currentlySelected={currentlySelected}
             />
             <span className='vertical-spacer' />

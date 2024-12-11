@@ -95,7 +95,7 @@ export async function generateFile(file, targets) {
     const response = await fetch(self.installType === "development" ?
       "http://localhost:8080/generateFileHandler"
       :
-      "https://generator-server-838407650486.us-central1.run.app", {
+      "https://generator-server-838407650486.us-central1.run.app/generateFileHandler", {
       headers: {
         "Content-Type": "application/json"
       },
