@@ -6,6 +6,13 @@ chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONT
 // Direct user to restart browser for cleanup of any injected elements 
 chrome.runtime.setUninstallURL("https://us-central1-cover-letter-generator-439117.cloudfunctions.net/tooltip-cleanup");
 
+// set of urls where content script injection is forbidden
+const forbiddenUrls = [
+    "https://chromewebstore.google.com/",
+    "chrome://",
+    "https://chrome.google.com"
+];
+
 /////////////////// LISTENERS ///////////////////
 
 // Inject content script into all tabs on extension update
@@ -21,6 +28,10 @@ chrome.commands.onCommand.addListener(async function (command) {
     if (command === "get-selected-text") {
         const selection = await awaitableGetSelectedText();
 
+        if (!selection) {
+            return;
+        }
+
         const text = selection[0].result;
 
         chrome.storage.session.get(["templateTargets", "currentlySelected"], result => {
@@ -32,6 +43,12 @@ chrome.commands.onCommand.addListener(async function (command) {
         });
     }
     else if (command === "toggle-previous-select" || command === "toggle-next-select") {
+        const currentTab = await getCurrentTab();
+
+        if (forbiddenUrls.some(url => currentTab.url.startsWith(url))) {
+            return;
+        }
+
         chrome.storage.session.get(["templateTargets", "currentlySelected"], result => {
             if (result.templateTargets) {
                 const targetArray = Object.keys(result.templateTargets);
@@ -55,7 +72,7 @@ chrome.commands.onCommand.addListener(async function (command) {
             if (result.currentlySelected) {
                 chrome.tabs.query({ active: true, lastFocusedWindow: true }, tabs => {
                     tabs.forEach(async (tab) => {
-                        if (!tab.url.startsWith("chrome://")) {
+                        if (!forbiddenUrls.some(url => tab.url.startsWith(url))) {
                             chrome.tabs.sendMessage(tab.id, "toggleTooltip");
                         }
                     });
@@ -69,15 +86,13 @@ chrome.commands.onCommand.addListener(async function (command) {
 
 // auto-inject content script on extension update
 function onInstallHandler(details) {
-    details.reason !== "install" && injectContentScript()
+    details.reason !== "install" && injectContentScript();
 };
 
 function injectContentScript() {
     chrome.tabs.query({}, tabs => {
         tabs.forEach(async (tab) => {
-          if (!tab.url.startsWith("chrome://") &&
-            (!tab.url.startsWith("https://chromewebstore.google.com/")) &&
-                (!tab.url.startsWith("https://chrome.google.com/"))) {
+          if (!forbiddenUrls.some(url => tab.url.startsWith(url))) {
             // remove injected stylesheet if it already exists
             await chrome.scripting.removeCSS({
                 target: { tabId: tab.id },
@@ -134,11 +149,14 @@ async function getCurrentTab() {
 async function awaitableGetSelectedText() {
     return new Promise(async (resolve, reject) => {
         const currentTab = await getCurrentTab();
-        chrome.scripting.executeScript({
-            target: { tabId: currentTab.id },
-            func: getSelectionText
-        }, text => {
-            resolve(text);
-        });
+
+        if (!forbiddenUrls.some(url => currentTab.url.startsWith(url))) {
+            chrome.scripting.executeScript({
+                target: { tabId: currentTab.id },
+                func: getSelectionText
+            }, text => {
+                resolve(text);
+            });
+        }
     });
 }
