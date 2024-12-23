@@ -12,11 +12,13 @@ import ButtonGroup from './components/ButtonGroup';
 import './App.css';
 
 
+// Constants
+const PLACEHOLDER_FILE = { name: "Choose a File (.docx)", data: {} };
+const FILE_READER = new FileReader();
+
 // App Component
 export default function App() {
-  const PLACEHOLDER_FILE = { name: "Choose a File (.docx)", data: {} };
-  const FILE_READER = new FileReader();
-
+  
   const [currentFile, setCurrentFile] = useState(PLACEHOLDER_FILE);
   const [templateTargets, setTemplateTargets] = useState({});
   const [currentlySelected, setCurrentlySelected] = useState("");
@@ -24,28 +26,35 @@ export default function App() {
 
   const fileInputRef = useRef();
 
-  useEffect(() => {
-    chrome.storage.session.get(["currentFile", "templateTargets", "currentlySelected"], result => {
-      result.currentFile !== undefined ? setCurrentFile(result.currentFile) : setCurrentFile(PLACEHOLDER_FILE);
-      result.templateTargets !== undefined ? setTemplateTargets(result.templateTargets) : setTemplateTargets({});
-      result.currentlySelected !== undefined ? setCurrentlySelected(result.currentlySelected) : setCurrentlySelected("");
-    });
+// Define the event handler outside of the useEffect
+const handleStorageChange = (changes) => {
+  if ("currentFile" in changes) {
+    setCurrentFile(changes.currentFile.newValue || PLACEHOLDER_FILE);
+  }
+  if ("templateTargets" in changes) {
+    flushSync(() => setTemplateTargets(changes.templateTargets.newValue || {}));
+  }
+  if ("currentlySelected" in changes) {
+    setCurrentlySelected(changes.currentlySelected.newValue || "");
+  }
+};
 
-    chrome.storage.session.onChanged.addListener((changes, namespace) => {
-      if ("currentFile" in changes) {
-        changes.currentFile.newValue !== undefined ? setCurrentFile(changes.currentFile.newValue) :
-          setCurrentFile(PLACEHOLDER_FILE);
-      }
-      if ("templateTargets" in changes) {
-        changes.templateTargets.newValue !== undefined ? 
-          flushSync(() => setTemplateTargets(changes.templateTargets.newValue)) : setTemplateTargets({});
-      }
-      if ("currentlySelected" in changes) {
-        changes.currentlySelected.newValue !== undefined ? setCurrentlySelected(changes.currentlySelected.newValue) :
-          setCurrentlySelected("");
-      }
-    });
-  }, []);
+useEffect(() => {
+  // Initial fetch of data from chrome storage
+  chrome.storage.session.get(["currentFile", "templateTargets", "currentlySelected"], result => {
+    setCurrentFile(result.currentFile || PLACEHOLDER_FILE);
+    setTemplateTargets(result.templateTargets || {});
+    setCurrentlySelected(result.currentlySelected || "");
+  });
+
+  // Add the event listener
+  chrome.storage.session.onChanged.addListener(handleStorageChange);
+
+  // Cleanup the event listener on component unmount
+  return () => {
+    chrome.storage.session.onChanged.removeListener(handleStorageChange);
+  };
+}, []);
 
   return (
     <div className="container">
