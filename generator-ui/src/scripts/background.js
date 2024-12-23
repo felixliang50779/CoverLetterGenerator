@@ -86,27 +86,41 @@ chrome.commands.onCommand.addListener(async function (command) {
 
 // auto-inject content script on extension update
 function onInstallHandler(details) {
-    details.reason !== "install" && injectContentScript();
+    executeTooltipCleanup();
 };
+
+function executeTooltipCleanup() {
+    chrome.tabs.query({}, tabs => {
+        tabs.forEach(async (tab) => {
+          if (!forbiddenUrls.some(url => tab.url.startsWith(url))) {
+            // remove injected shadow host stylesheet if it already exists
+            await chrome.scripting.removeCSS({
+                target: { tabId: tab.id },
+                files: [chrome.runtime.getManifest().content_scripts[1].css[1]]
+            });
+
+            // remove injected html element
+            chrome.scripting.executeScript({
+                target: { tabId: tab.id },
+                files: [chrome.runtime.getManifest().content_scripts[0].js[0]]
+            });
+          }
+        });
+    });
+}
 
 function injectContentScript() {
     chrome.tabs.query({}, tabs => {
         tabs.forEach(async (tab) => {
           if (!forbiddenUrls.some(url => tab.url.startsWith(url))) {
-            // remove injected stylesheet if it already exists
-            await chrome.scripting.removeCSS({
-                target: { tabId: tab.id },
-                files: [chrome.runtime.getManifest().content_scripts[0].css[1]]
-            });
-            
             chrome.scripting.insertCSS({
                 target: { tabId: tab.id },
-                files: [chrome.runtime.getManifest().content_scripts[0].css[1]]
+                files: [chrome.runtime.getManifest().content_scripts[1].css[1]]
             });
 
             chrome.scripting.executeScript({
                 target: { tabId: tab.id },
-                files: [chrome.runtime.getManifest().content_scripts[0].js[0]]
+                files: [chrome.runtime.getManifest().content_scripts[1].js[0]]
             });
           }
         });

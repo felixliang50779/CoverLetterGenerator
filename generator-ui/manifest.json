@@ -20,6 +20,12 @@
     "content_scripts": [
       {
         "matches": ["<all_urls>"],
+        "js": ["content-script/src/tooltipCleanup.js"],
+        "type": "module",
+        "run_at": "document_start"
+      },
+      {
+        "matches": ["<all_urls>"],
         "js": ["content-script/src/main.jsx"],
         "type": "module",
         "run_at": "document_end"
