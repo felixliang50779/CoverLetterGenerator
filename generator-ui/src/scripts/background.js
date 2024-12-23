@@ -86,26 +86,26 @@ chrome.commands.onCommand.addListener(async function (command) {
 
 // auto-inject content script on extension update
 function onInstallHandler(details) {
-    executeTooltipCleanup();
-};
-
-function executeTooltipCleanup() {
     chrome.tabs.query({}, tabs => {
         tabs.forEach(async (tab) => {
           if (!forbiddenUrls.some(url => tab.url.startsWith(url))) {
-            // remove injected shadow host stylesheet
-            await chrome.scripting.removeCSS({
-                target: { tabId: tab.id },
-                files: [chrome.runtime.getManifest().content_scripts[1].css[1]]
-            });
-
-            // remove injected html element
-            chrome.scripting.executeScript({
-                target: { tabId: tab.id },
-                files: [chrome.runtime.getManifest().content_scripts[0].js[0]]
-            });
+            executeTooltipCleanup(tab);
           }
         });
+    });
+};
+
+async function executeTooltipCleanup(tab) {
+    // remove injected shadow host stylesheet
+    await chrome.scripting.removeCSS({
+        target: { tabId: tab.id },
+        files: [chrome.runtime.getManifest().content_scripts[1].css[1]]
+    });
+
+    // remove injected html element
+    await chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        files: [chrome.runtime.getManifest().content_scripts[0].js[0]]
     });
 }
 
@@ -113,12 +113,15 @@ function injectContentScript() {
     chrome.tabs.query({}, tabs => {
         tabs.forEach(async (tab) => {
           if (!forbiddenUrls.some(url => tab.url.startsWith(url))) {
-            chrome.tabs.sendMessage(tab.id, "heartbeat", response => {
+            chrome.tabs.sendMessage(tab.id, "heartbeat", async (response) => {
                 if (chrome.runtime.lastError) {
+                    // LOGGING - comment out for deploy
                     console.log(`content script not detected on tab with id ${tab.id} - injecting...`);
                 }
 
                 if (response !== "true") {
+                    await executeTooltipCleanup(tab);
+
                     chrome.scripting.insertCSS({
                         target: { tabId: tab.id },
                         files: [chrome.runtime.getManifest().content_scripts[1].css[1]]
