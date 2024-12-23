@@ -113,14 +113,18 @@ function injectContentScript() {
     chrome.tabs.query({}, tabs => {
         tabs.forEach(async (tab) => {
           if (!forbiddenUrls.some(url => tab.url.startsWith(url))) {
-            chrome.scripting.insertCSS({
-                target: { tabId: tab.id },
-                files: [chrome.runtime.getManifest().content_scripts[1].css[1]]
-            });
-
-            chrome.scripting.executeScript({
-                target: { tabId: tab.id },
-                files: [chrome.runtime.getManifest().content_scripts[1].js[0]]
+            chrome.tabs.sendMessage(tab.id, "heartbeat", response => {
+                if (response !== "true") {
+                    chrome.scripting.insertCSS({
+                        target: { tabId: tab.id },
+                        files: [chrome.runtime.getManifest().content_scripts[1].css[1]]
+                    });
+        
+                    chrome.scripting.executeScript({
+                        target: { tabId: tab.id },
+                        files: [chrome.runtime.getManifest().content_scripts[1].js[0]]
+                    });
+                }
             });
           }
         });

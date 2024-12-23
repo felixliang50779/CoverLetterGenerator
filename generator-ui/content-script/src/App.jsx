@@ -56,6 +56,9 @@ export default function App() {
                         chrome.storage.session.set({ tooltipVisible: !result.tooltipVisible });
                 });
             }
+            else if (message === "heartbeat") {
+                sendResponse("true");
+            }
         });
     }, []);
 
