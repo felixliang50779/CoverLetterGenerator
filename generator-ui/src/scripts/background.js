@@ -86,7 +86,7 @@ chrome.commands.onCommand.addListener(async function (command) {
 
 // auto-inject content script on extension update
 function onInstallHandler(details) {
-    executeTooltipCleanup();
+    details.reason !== "install" && executeTooltipCleanup();
 };
 
 function executeTooltipCleanup() {
