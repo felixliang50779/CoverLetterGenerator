@@ -114,6 +114,11 @@ function injectContentScript() {
         tabs.forEach(async (tab) => {
           if (!forbiddenUrls.some(url => tab.url.startsWith(url))) {
             chrome.tabs.sendMessage(tab.id, "heartbeat", response => {
+                if (chrome.runtime.lastError) {
+                    console.log(`content script not detected on tab with id ${tab.id} - injecting...`);
+                    return;  // Short circuit here without letting the error get logged
+                }
+
                 if (response !== "true") {
                     chrome.scripting.insertCSS({
                         target: { tabId: tab.id },
