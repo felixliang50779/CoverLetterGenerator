@@ -11,7 +11,7 @@
 - Run `npm run build` in `generator-ui` to build the extension
 - Run `npm start` in `generator-server` to start the file generation server
 - To install the extension within your browser:
-    - Ensure you are using Google Chrome
+    - Ensure you are using a Chromium based browser (ex. Google Chrome, Brave, Chromium etc)
     - Head to `chrome://extensions`
     - Select "Load unpacked"
     - Select the directory where you cloned the project to and make sure you select the `./CoverLetterGenerator/generator-ui/build` folder
