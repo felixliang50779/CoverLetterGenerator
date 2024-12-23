@@ -116,16 +116,11 @@ function injectContentScript() {
             chrome.tabs.sendMessage(tab.id, "heartbeat", async (response) => {
                 if (chrome.runtime.lastError) {
                     // LOGGING - comment out for deploy
-                    console.log(`content script not detected on tab with id ${tab.id} - injecting...`);
+                    console.log(`content script not detected on tab with id ${tab.id} - manually injecting...`);
                 }
 
                 if (response !== "true") {
                     await executeTooltipCleanup(tab);
-
-                    chrome.scripting.insertCSS({
-                        target: { tabId: tab.id },
-                        files: [chrome.runtime.getManifest().content_scripts[1].css[1]]
-                    });
         
                     chrome.scripting.executeScript({
                         target: { tabId: tab.id },
