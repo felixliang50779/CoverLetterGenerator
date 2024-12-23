@@ -86,14 +86,14 @@ chrome.commands.onCommand.addListener(async function (command) {
 
 // auto-inject content script on extension update
 function onInstallHandler(details) {
-    details.reason !== "install" && executeTooltipCleanup();
+    executeTooltipCleanup();
 };
 
 function executeTooltipCleanup() {
     chrome.tabs.query({}, tabs => {
         tabs.forEach(async (tab) => {
           if (!forbiddenUrls.some(url => tab.url.startsWith(url))) {
-            // remove injected shadow host stylesheet if it already exists
+            // remove injected shadow host stylesheet
             await chrome.scripting.removeCSS({
                 target: { tabId: tab.id },
                 files: [chrome.runtime.getManifest().content_scripts[1].css[1]]
