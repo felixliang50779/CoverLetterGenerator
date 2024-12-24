@@ -1,39 +1,43 @@
+.hidden {
+    display: none;
+}
+
 .float-label {
     position: relative;
 }
 
 .label {
-    font-weight: normal;
-    position: absolute;
-    pointer-events: none;
-    left: 12px;
-    top: 8px;
-    transition: 0.2s ease all;
+    font-weight: bold !important;
+    position: absolute !important;
+    pointer-events: none !important;
+    left: 12px !important;
+    top: 8px !important;
+    transition: 0.2s ease all !important;
 }
 
 .as-placeholder {
-    color: gray;
+    color: gray !important;
 }
 
 .as-label {
-    top: -8px;
+    top: -8px !important;
     font-size: 12px !important;
-    background: #1a1a1a;
-    color: #f8f8f2;
-    padding: 0 4px;
-    margin-left: -4px;
+    background: #1a1a1a !important;
+    color: #f8f8f2 !important;
+    padding: 0 4px !important;
+    margin-left: -4px !important;
 }
 
 .ant-input {
     background-color: #1a1a1a !important;
-    color: #f8f8f2;
-    width: 155%;
+    color: #f8f8f2 !important;
+    width: 155% !important;
 }
 
 .ant-input-outlined:hover, .ant-input-outlined:focus {
-    border-color: #646cff;
+    border-color: #646cff !important;
 }
 
 .selected {
-    border-color: #646cff;
+    border-color: #646cff !important;
 }
