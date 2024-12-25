@@ -1,5 +1,5 @@
 # CoverLetterGenerator
-- chrome extension to quickly fill out a cover letter template for different companies
+- chrome extension to quickly fill out a cover letter template for different positions
 
 # Usage
 - Visit https://chromewebstore.google.com/detail/cover-letter-generator/bcbacpbjnaofjickhkhlcpemelfigipn to view features and usage instructions
