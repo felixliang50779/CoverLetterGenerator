@@ -67,7 +67,7 @@ export default function App() {
               'hidden button confirm-button' : 'button confirm-button'}
             onClick={async () => {
               await initializeTemplating(currentFile, FILE_READER, setInvalidState);
-              chrome.runtime.sendMessage("injectContentScript");
+              !invalidState && chrome.runtime.sendMessage("injectContentScript");
             }}>
               Parse
           </button> :

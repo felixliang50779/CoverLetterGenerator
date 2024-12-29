@@ -15,8 +15,8 @@ const forbiddenUrls = [
 
 /////////////////// LISTENERS ///////////////////
 
-// Inject content script into all tabs on extension update
-chrome.runtime.onInstalled.addListener(onInstallHandler);
+// Inject content script into all tabs on extension install / update
+chrome.runtime.onInstalled.addListener(cleanupHandler);
 
 // Listen for requests from popup to inject content script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -84,8 +84,8 @@ chrome.commands.onCommand.addListener(async function (command) {
 
 /////////////////// HELPER FUNCTIONS ///////////////////
 
-// auto-inject content script on extension update
-function onInstallHandler(details) {
+// auto-remove lingering tooltip on extension install or update
+function cleanupHandler() {
     chrome.tabs.query({}, tabs => {
         tabs.forEach(async (tab) => {
           if (!forbiddenUrls.some(url => tab.url.startsWith(url))) {
@@ -96,12 +96,6 @@ function onInstallHandler(details) {
 };
 
 async function executeTooltipCleanup(tab) {
-    // remove injected shadow host stylesheet
-    await chrome.scripting.removeCSS({
-        target: { tabId: tab.id },
-        files: [chrome.runtime.getManifest().content_scripts[1].css[1]]
-    });
-
     // remove injected html element
     await chrome.scripting.executeScript({
         target: { tabId: tab.id },
