@@ -3,10 +3,6 @@ import { Card } from "antd";
 import { SelectOutlined } from "@ant-design/icons";
 import FloatInput from './FloatInput';
 
-// Styling
-import '../App.css';
-
-
 // TemplateItems Component
 const TemplateItems = ({ templateTargets, currentlySelected }) => {
     return (

@@ -3,9 +3,7 @@ import { useState, useRef } from "react";
 import { MoreOutlined } from "@ant-design/icons";
 import { Input } from "antd";
 
-// Styling
 import "./FloatInput.css";
-
 
 const FloatInput = (props) => {
   // Constants
@@ -57,7 +55,7 @@ const FloatInput = (props) => {
           type={type}/>
         <label className={labelClass}>{label}</label>
       </div>
-      <MoreOutlined className={isTooltip ? "drag-handle" : "hidden"} />
+      <MoreOutlined className={isTooltip ? "drag-handle" : "hidden-drag-handle"} />
     </div>
   );
 };

@@ -62,9 +62,9 @@ export default function App() {
         !invalidState
         ?
         (!Object.keys(templateTargets).length ?
-          <button
-            className={currentFile.name === PLACEHOLDER_FILE.name ?
-              'hidden button confirm-button' : 'button confirm-button'}
+          <button 
+            hidden={currentFile.name === PLACEHOLDER_FILE.name}
+            className="button confirm-button"
             onClick={async () => {
               await initializeTemplating(currentFile, FILE_READER, setInvalidState);
               !invalidState && chrome.runtime.sendMessage("injectContentScript");

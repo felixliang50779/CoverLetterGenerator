@@ -1,9 +1,6 @@
 // Internal Modules
 import { clearData } from '../scripts/helper';
 
-// Styling
-import '../App.css';
-
 // FileUpload Component
 const FileUpload = ({ currentFile, setCurrentFile, fileInputRef, setInvalidState, placeholderFile }) =>{
     return (

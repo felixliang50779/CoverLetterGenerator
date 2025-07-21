@@ -4,12 +4,10 @@ import debounce from "debounce";
 // Internal Modules
 import { generateFile, clearData } from '../scripts/helper';
 
-// Styling
-import '../App.css';
-
-
 // ButtonGroup Component
 const ButtonGroup = ({ templateTargets, fileInputRef, setInvalidState, currentFile }) => {
+  const allowGenerate = Object.values(templateTargets).every(value => value !== "");
+
   return (
     <div className="button-group">
       <button
@@ -20,8 +18,8 @@ const ButtonGroup = ({ templateTargets, fileInputRef, setInvalidState, currentFi
       </button>
       <span className="horizontal-spacer" />
       <button
-        className={Object.values(templateTargets).every(value => value !== "") ? 
-          "button confirm-button split" : "hidden button confirm-button"}
+        hidden={!allowGenerate}
+        className={allowGenerate ? "button confirm-button split" : "button confirm-button"}
         onClick={debounce(() => generateFile(currentFile, templateTargets), 500)}>
           Generate
       </button>

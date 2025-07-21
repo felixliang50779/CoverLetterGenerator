@@ -3,11 +3,11 @@ import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
 
 // shadow host stylesheet
-import hostStyles from "./FloatingTooltip.css?inline";
+import hostStyles from "./ShadowHost.css?inline";
 
-// inline the shadow root stylesheet directly
-// for it to be usable
-import tooltipStyles from "./TooltipInput.css?inline";
+// inline tooltip stylesheet directly
+// to avoid it bleeding into the browser DOM
+import tooltipStyles from "./FloatTooltip.css?inline";
 
 const tooltip = document.createElement("div");
 tooltip.id = "floating-tooltip";

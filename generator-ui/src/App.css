@@ -82,10 +82,6 @@ input[type="file"] {
   margin: 0 0.5em 0 0.5em;
 }
 
-.hidden {
-  display: none;
-}
-
 .secondary-container {
   display: flex;
   flex-direction: column;
